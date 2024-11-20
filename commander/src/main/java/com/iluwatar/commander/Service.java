@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,42 +24,42 @@
  */
 package com.iluwatar.commander;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Random;
 import com.iluwatar.commander.exceptions.DatabaseUnavailableException;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 
 /**
- * Service class is an abstract class extended by all services in this example. They
- * all have a public receiveRequest method to receive requests, which could also contain
- * details of the user other than the implementation details (though we are not doing
- * that here) and updateDb method which adds to their respective databases. There is a
- * method to generate transaction/request id for the transactions/requests, which are
- * then sent back. These could be stored by the {@link Commander} class in a separate
- * database for reference (though we are not doing that here).
+ * Service class is an abstract class extended by all services in this example. They all have a
+ * public receiveRequest method to receive requests, which could also contain details of the user
+ * other than the implementation details (though we are not doing that here) and updateDb method
+ * which adds to their respective databases. There is a method to generate transaction/request id
+ * for the transactions/requests, which are then sent back. These could be stored by the {@link
+ * Commander} class in a separate database for reference (though we are not doing that here).
  */
 
 public abstract class Service {
-  
+
   protected final Database database;
   public ArrayList<Exception> exceptionsList;
+  private static final SecureRandom RANDOM = new SecureRandom();
   private static final String ALL_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-  private static final Hashtable<String, Boolean> USED_IDS = new Hashtable<String, Boolean>();
+  private static final Hashtable<String, Boolean> USED_IDS = new Hashtable<>();
 
-  protected Service(Database db, Exception...exc) {
+  protected Service(Database db, Exception... exc) {
     this.database = db;
-    this.exceptionsList = new ArrayList<Exception>(Arrays.asList(exc));
+    this.exceptionsList = new ArrayList<>(List.of(exc));
   }
 
-  public abstract String receiveRequest(Object...parameters) throws DatabaseUnavailableException;
-  protected abstract String updateDb(Object...parameters) throws DatabaseUnavailableException;
+  public abstract String receiveRequest(Object... parameters) throws DatabaseUnavailableException;
+
+  protected abstract String updateDb(Object... parameters) throws DatabaseUnavailableException;
 
   protected String generateId() {
     StringBuilder random = new StringBuilder();
-    Random rand = new Random();
     while (random.length() < 12) { // length of the random string.
-      int index = (int) (rand.nextFloat() * ALL_CHARS.length());
+      int index = (int) (RANDOM.nextFloat() * ALL_CHARS.length());
       random.append(ALL_CHARS.charAt(index));
     }
     String id = random.toString();

@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,12 +29,12 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- * Document interface
+ * Document interface.
  */
 public interface Document {
 
   /**
-   * Puts the value related to the key
+   * Puts the value related to the key.
    *
    * @param key   element key
    * @param value element value
@@ -41,7 +43,7 @@ public interface Document {
   Void put(String key, Object value);
 
   /**
-   * Gets the value for the key
+   * Gets the value for the key.
    *
    * @param key element key
    * @return value or null
@@ -49,7 +51,7 @@ public interface Document {
   Object get(String key);
 
   /**
-   * Gets the stream of child documents
+   * Gets the stream of child documents.
    *
    * @param key         element key
    * @param constructor constructor of child class

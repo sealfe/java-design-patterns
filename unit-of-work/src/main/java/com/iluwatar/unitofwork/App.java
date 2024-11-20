@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,25 +28,29 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * {@link App} Application for managing student data.
+ * {@link App} Application demonstrating unit of work pattern.
  */
 public class App {
   /**
+   * Program entry point.
    *
    * @param args no argument sent
    */
+
   public static void main(String[] args) {
-    Student ram = new Student(1, "Ram", "Street 9, Cupertino");
-    Student shyam = new Student(2, "Shyam", "Z bridge, Pune");
-    Student gopi = new Student(3, "Gopi", "Street 10, Mumbai");
+    // create some weapons
+    var enchantedHammer = new Weapon(1, "enchanted hammer");
+    var brokenGreatSword = new Weapon(2, "broken great sword");
+    var silverTrident = new Weapon(3, "silver trident");
 
-    HashMap<String, List<Student>> context = new HashMap<>();
-    StudentDatabase studentDatabase = new StudentDatabase();
-    StudentRepository studentRepository = new StudentRepository(context, studentDatabase);
+    // create repository
+    var weaponRepository = new ArmsDealer(new HashMap<>(),
+            new WeaponDatabase());
 
-    studentRepository.registerNew(ram);
-    studentRepository.registerModified(shyam);
-    studentRepository.registerDeleted(gopi);
-    studentRepository.commit();
+    // perform operations on the weapons
+    weaponRepository.registerNew(enchantedHammer);
+    weaponRepository.registerModified(silverTrident);
+    weaponRepository.registerDeleted(brokenGreatSword);
+    weaponRepository.commit();
   }
 }

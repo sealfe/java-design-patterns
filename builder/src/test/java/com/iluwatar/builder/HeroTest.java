@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,24 +24,23 @@
  */
 package com.iluwatar.builder;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.Test;
+
 /**
- * Date: 12/6/15 - 11:01 PM
+ * HeroTest
  *
- * @author Jeroen Meulemeester
  */
-public class HeroTest {
+class HeroTest {
 
   /**
    * Test if we get the expected exception when trying to create a hero without a profession
    */
   @Test
-  public void testMissingProfession() throws Exception {
+  void testMissingProfession() {
     assertThrows(IllegalArgumentException.class, () -> new Hero.Builder(null, "Sir without a job"));
   }
 
@@ -47,7 +48,7 @@ public class HeroTest {
    * Test if we get the expected exception when trying to create a hero without a name
    */
   @Test
-  public void testMissingName() throws Exception {
+  void testMissingName() {
     assertThrows(IllegalArgumentException.class, () -> new Hero.Builder(Profession.THIEF, null));
   }
 
@@ -55,10 +56,10 @@ public class HeroTest {
    * Test if the hero build by the builder has the correct attributes, as requested
    */
   @Test
-  public void testBuildHero() throws Exception {
+  void testBuildHero() {
     final String heroName = "Sir Lancelot";
 
-    final Hero hero = new Hero.Builder(Profession.WARRIOR, heroName)
+    final var hero = new Hero.Builder(Profession.WARRIOR, heroName)
         .withArmor(Armor.CHAIN_MAIL)
         .withWeapon(Weapon.SWORD)
         .withHairType(HairType.LONG_CURLY)
@@ -67,12 +68,12 @@ public class HeroTest {
 
     assertNotNull(hero);
     assertNotNull(hero.toString());
-    assertEquals(Profession.WARRIOR, hero.getProfession());
-    assertEquals(heroName, hero.getName());
-    assertEquals(Armor.CHAIN_MAIL, hero.getArmor());
-    assertEquals(Weapon.SWORD, hero.getWeapon());
-    assertEquals(HairType.LONG_CURLY, hero.getHairType());
-    assertEquals(HairColor.BLOND, hero.getHairColor());
+    assertEquals(Profession.WARRIOR, hero.profession());
+    assertEquals(heroName, hero.name());
+    assertEquals(Armor.CHAIN_MAIL, hero.armor());
+    assertEquals(Weapon.SWORD, hero.weapon());
+    assertEquals(HairType.LONG_CURLY, hero.hairType());
+    assertEquals(HairColor.BLOND, hero.hairColor());
 
   }
 

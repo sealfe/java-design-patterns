@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +24,18 @@
  */
 package com.iluwatar.interpreter;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 /**
- * Date: 12/14/15 - 12:08 PM
+ * NumberExpressionTest
  *
- * @author Jeroen Meulemeester
  */
-public class NumberExpressionTest extends ExpressionTest<NumberExpression> {
+class NumberExpressionTest extends ExpressionTest<NumberExpression> {
 
   /**
    * Create a new set of test entries with the expected result
@@ -59,10 +59,10 @@ public class NumberExpressionTest extends ExpressionTest<NumberExpression> {
    */
   @ParameterizedTest
   @MethodSource("expressionProvider")
-  public void testFromString(NumberExpression first) throws Exception {
-    final int expectedValue = first.interpret();
-    final String testStringValue = String.valueOf(expectedValue);
-    final NumberExpression numberExpression = new NumberExpression(testStringValue);
+  void testFromString(NumberExpression first) {
+    final var expectedValue = first.interpret();
+    final var testStringValue = String.valueOf(expectedValue);
+    final var numberExpression = new NumberExpression(testStringValue);
     assertEquals(expectedValue, numberExpression.interpret());
   }
 

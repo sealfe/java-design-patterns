@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,25 +29,25 @@ import com.iluwatar.commander.Service;
 import com.iluwatar.commander.exceptions.DatabaseUnavailableException;
 
 /**
- * The EmployeeHandle class is the middle-man between {@link Commander} and 
+ * The EmployeeHandle class is the middle-man between {@link com.iluwatar.commander.Commander} and
  * {@link EmployeeDatabase}.
  */
 
 public class EmployeeHandle extends Service {
 
-  public EmployeeHandle(EmployeeDatabase db, Exception...exc) {
+  public EmployeeHandle(EmployeeDatabase db, Exception... exc) {
     super(db, exc);
   }
 
-  public String receiveRequest(Object...parameters) throws DatabaseUnavailableException {
-    return updateDb((Order)parameters[0]);
+  public String receiveRequest(Object... parameters) throws DatabaseUnavailableException {
+    return updateDb(parameters[0]);
   }
 
-  protected String updateDb(Object...parameters) throws DatabaseUnavailableException {
-    Order o = (Order) parameters[0];
+  protected String updateDb(Object... parameters) throws DatabaseUnavailableException {
+    var o = (Order) parameters[0];
     if (database.get(o.id) == null) {
       database.add(o);
-      return o.id; //true rcvd - change addedToEmployeeHandle to true else dont do anything
+      return o.id; //true rcvd - change addedToEmployeeHandle to true else don't do anything
     }
     return null;
   }

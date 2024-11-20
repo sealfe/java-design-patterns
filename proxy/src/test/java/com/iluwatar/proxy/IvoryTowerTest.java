@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,44 +24,43 @@
  */
 package com.iluwatar.proxy;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.iluwatar.proxy.utils.InMemoryAppender;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 /**
  * Tests for {@link IvoryTower}
  */
-public class IvoryTowerTest {
+class IvoryTowerTest {
 
   private InMemoryAppender appender;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     appender = new InMemoryAppender(IvoryTower.class);
   }
 
   @AfterEach
-  public void tearDown() {
+  void tearDown() {
     appender.stop();
   }
 
   @Test
-  public void testEnter() throws Exception {
-    final Wizard[] wizards = new Wizard[]{
+  void testEnter() {
+    final var wizards = List.of(
         new Wizard("Gandalf"),
         new Wizard("Dumbledore"),
         new Wizard("Oz"),
         new Wizard("Merlin")
-    };
+    );
 
-    IvoryTower tower = new IvoryTower();
-    for (Wizard wizard : wizards) {
-      tower.enter(wizard);
-    }
+    var tower = new IvoryTower();
+    wizards.forEach(tower::enter);
 
     assertTrue(appender.logContains("Gandalf enters the tower."));
     assertTrue(appender.logContains("Dumbledore enters the tower."));

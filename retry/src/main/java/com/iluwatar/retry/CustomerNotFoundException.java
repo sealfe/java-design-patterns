@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +24,24 @@
  */
 package com.iluwatar.retry;
 
+import java.io.Serial;
+
 /**
- * Indicates that the customer was not found. 
- * <p>
- * The severity of this error is bounded by its context: was the search for the customer triggered
- * by an input from some end user, or were the search parameters pulled from your database?
+ * Indicates that the customer was not found.
  *
- * @author George Aristy (george.aristy@gmail.com)
+ * <p>The severity of this error is bounded by its context: was the search for the customer
+ * triggered by an input from some end user, or were the search parameters pulled from your
+ * database?
+ *
  */
 public final class CustomerNotFoundException extends BusinessException {
+
+  @Serial
   private static final long serialVersionUID = -6972888602621778664L;
 
   /**
    * Ctor.
-   * 
+   *
    * @param message the error message
    */
   public CustomerNotFoundException(String message) {

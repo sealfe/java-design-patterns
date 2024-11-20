@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +24,7 @@
  */
 package com.iluwatar.leaderelection;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Abstract class of all the message manager classes.
@@ -37,33 +37,34 @@ public abstract class AbstractMessageManager implements MessageManager {
   protected Map<Integer, Instance> instanceMap;
 
   /**
-   * Construtor of AbstractMessageManager
+   * Constructor of AbstractMessageManager.
    */
   public AbstractMessageManager(Map<Integer, Instance> instanceMap) {
     this.instanceMap = instanceMap;
   }
 
   /**
-   * Find the next instance with smallest ID.
+   * Find the next instance with the smallest ID.
+   *
    * @return The next instance.
    */
   protected Instance findNextInstance(int currentId) {
     Instance result = null;
-    List<Integer> candidateList = instanceMap.keySet()
-          .stream()
-          .filter((i) -> i > currentId && instanceMap.get(i).isAlive())
-          .sorted()
-          .collect(Collectors.toList());
+    var candidateList = instanceMap.keySet()
+        .stream()
+        .filter((i) -> i > currentId && instanceMap.get(i).isAlive())
+        .sorted()
+        .toList();
     if (candidateList.isEmpty()) {
-      int index = instanceMap.keySet()
+      var index = instanceMap.keySet()
           .stream()
           .filter((i) -> instanceMap.get(i).isAlive())
           .sorted()
-          .collect(Collectors.toList())
+          .toList()
           .get(0);
       result = instanceMap.get(index);
     } else {
-      int index = candidateList.get(0);
+      var index = candidateList.get(0);
       result = instanceMap.get(index);
     }
     return result;

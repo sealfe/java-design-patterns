@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,13 +29,15 @@ package com.iluwatar.converter;
  */
 public class UserConverter extends Converter<UserDto, User> {
 
-  /**
-   * Constructor.
-   */
   public UserConverter() {
-    super(userDto -> new User(userDto.getFirstName(), userDto.getLastName(), userDto.isActive(),
-        userDto.getEmail()),
-        user -> new UserDto(user.getFirstName(), user.getLastName(), user.isActive(),
-        user.getUserId()));
+    super(UserConverter::convertToEntity, UserConverter::convertToDto);
+  }
+
+  private static UserDto convertToDto(User user) {
+    return new UserDto(user.firstName(), user.lastName(), user.active(), user.userId());
+  }
+
+  private static User convertToEntity(UserDto dto) {
+    return new User(dto.firstName(), dto.lastName(), dto.active(), dto.email());
   }
 }

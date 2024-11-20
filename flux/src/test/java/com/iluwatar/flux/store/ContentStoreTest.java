@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +24,13 @@
  */
 package com.iluwatar.flux.store;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+
 import com.iluwatar.flux.action.Content;
 import com.iluwatar.flux.action.ContentAction;
 import com.iluwatar.flux.action.MenuAction;
@@ -29,33 +38,24 @@ import com.iluwatar.flux.action.MenuItem;
 import com.iluwatar.flux.view.View;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-
 /**
- * Date: 12/12/15 - 10:18 PM
+ * ContentStoreTest
  *
- * @author Jeroen Meulemeester
  */
-public class ContentStoreTest {
+class ContentStoreTest {
 
   @Test
-  public void testOnAction() throws Exception {
-    final ContentStore contentStore = new ContentStore();
+  void testOnAction() {
+    final var contentStore = new ContentStore();
 
-    final View view = mock(View.class);
+    final var view = mock(View.class);
     contentStore.registerView(view);
 
-    verifyZeroInteractions(view);
+    verifyNoMoreInteractions(view);
 
     // Content should not react on menu action ...
     contentStore.onAction(new MenuAction(MenuItem.PRODUCTS));
-    verifyZeroInteractions(view);
+    verifyNoMoreInteractions(view);
 
     // ... but it should react on a content action
     contentStore.onAction(new ContentAction(Content.COMPANY));

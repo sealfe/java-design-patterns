@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,27 +24,26 @@
  */
 package com.iluwatar.balking;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link WashingMachine}
  */
-public class WashingMachineTest {
+class WashingMachineTest {
 
-  private FakeDelayProvider fakeDelayProvider = new FakeDelayProvider();
+  private final FakeDelayProvider fakeDelayProvider = new FakeDelayProvider();
 
   @Test
-  public void wash() {
-    WashingMachine washingMachine = new WashingMachine(fakeDelayProvider);
+  void wash() {
+    var washingMachine = new WashingMachine(fakeDelayProvider);
 
     washingMachine.wash();
     washingMachine.wash();
 
-    WashingMachineState machineStateGlobal = washingMachine.getWashingMachineState();
+    var machineStateGlobal = washingMachine.getWashingMachineState();
 
     fakeDelayProvider.task.run();
 
@@ -54,13 +55,13 @@ public class WashingMachineTest {
   }
 
   @Test
-  public void endOfWashing() {
-    WashingMachine washingMachine = new WashingMachine();
+  void endOfWashing() {
+    var washingMachine = new WashingMachine();
     washingMachine.wash();
     assertEquals(WashingMachineState.ENABLED, washingMachine.getWashingMachineState());
   }
 
-  private class FakeDelayProvider implements DelayProvider {
+  private static class FakeDelayProvider implements DelayProvider {
     private Runnable task;
 
     @Override

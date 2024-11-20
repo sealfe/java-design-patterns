@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,24 +25,27 @@
 package com.iluwatar.leaderelection;
 
 /**
- *  Instance interface
+ * Instance interface.
  */
 public interface Instance {
 
   /**
    * Check if the instance is alive or not.
+   *
    * @return {@code true} if the instance is alive.
    */
   boolean isAlive();
 
   /**
    * Set the health status of the certain instance.
+   *
    * @param alive {@code true} for alive.
    */
   void setAlive(boolean alive);
 
   /**
    * Consume messages from other instances.
+   *
    * @param message Message sent by other instances
    */
   void onMessage(Message message);

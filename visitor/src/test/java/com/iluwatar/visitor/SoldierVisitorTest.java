@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +27,20 @@ package com.iluwatar.visitor;
 import java.util.Optional;
 
 /**
- * Date: 12/30/15 - 18:59 PM
+ * SoldierVisitorTest
  *
- * @author Jeroen Meulemeester
  */
-public class SoldierVisitorTest extends VisitorTest<SoldierVisitor> {
+class SoldierVisitorTest extends VisitorTest<SoldierVisitor> {
 
   /**
-   * Create a new test instance for the given visitor
+   * Create a new test instance for the given visitor.
    */
   public SoldierVisitorTest() {
     super(
         new SoldierVisitor(),
-        Optional.empty(),
-        Optional.empty(),
-        Optional.of("Greetings soldier")
+        null,
+        null,
+        ("Greetings soldier")
     );
   }
 

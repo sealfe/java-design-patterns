@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +24,20 @@
  */
 package com.iluwatar.event.queue;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 /**
  * Testing the Audio service of the Queue
- * @author mkuprivecz
  *
  */
-public class AudioTest {
+class AudioTest {
 
   private Audio audio;
 
@@ -45,6 +45,7 @@ public class AudioTest {
   void createAudioInstance() {
     audio = new Audio();
   }
+
   /**
    * Test here that the playSound method works correctly
    * @throws UnsupportedAudioFileException when the audio file is not supported 
@@ -52,7 +53,7 @@ public class AudioTest {
    * @throws InterruptedException when the test is interrupted externally
    */
   @Test
-  public void testPlaySound() throws UnsupportedAudioFileException, IOException, InterruptedException {
+  void testPlaySound() throws UnsupportedAudioFileException, IOException, InterruptedException {
     audio.playSound(audio.getAudioStream("./etc/Bass-Drum-1.wav"), -10.0f);
     // test that service is started
     assertTrue(audio.isServiceRunning());
@@ -71,7 +72,7 @@ public class AudioTest {
    * @throws InterruptedException when the test is interrupted externally
    */
   @Test
-  public void testQueue() throws UnsupportedAudioFileException, IOException, InterruptedException {
+  void testQueue() throws UnsupportedAudioFileException, IOException, InterruptedException {
     audio.playSound(audio.getAudioStream("./etc/Bass-Drum-1.aif"), -10.0f);
     audio.playSound(audio.getAudioStream("./etc/Bass-Drum-1.aif"), -10.0f);
     audio.playSound(audio.getAudioStream("./etc/Bass-Drum-1.aif"), -10.0f);

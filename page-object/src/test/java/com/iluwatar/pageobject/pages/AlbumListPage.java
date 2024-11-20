@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +24,9 @@
  */
 package com.iluwatar.pageobject.pages;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
+import org.htmlunit.WebClient;
+import org.htmlunit.html.HtmlAnchor;
+import org.htmlunit.html.HtmlPage;
 import java.io.IOException;
 import java.util.List;
 
@@ -78,8 +79,8 @@ public class AlbumListPage extends Page {
    */
   public AlbumPage selectAlbum(String albumTitle) {
     // uses XPath to find list of html anchor tags with the class album in it
-    List<HtmlAnchor> albumLinks = (List<HtmlAnchor>) page.getByXPath("//tr[@class='album']//a");
-    for (HtmlAnchor anchor : albumLinks) {
+    var albumLinks = (List<HtmlAnchor>) page.getByXPath("//tr[@class='album']//a");
+    for (var anchor : albumLinks) {
       if (anchor.getTextContent().equals(albumTitle)) {
         try {
           anchor.click();

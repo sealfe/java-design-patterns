@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,11 +33,11 @@ import java.util.NoSuchElementException;
  * expect to retrieve TreeNodes according to the Integer's natural ordering (1, 2, 3...)
  *
  * @param <T> This Iterator has been implemented with generic typing to allow for TreeNodes of
- *     different value types
+ *            different value types
  */
 public class BstIterator<T extends Comparable<T>> implements Iterator<TreeNode<T>> {
 
-  private ArrayDeque<TreeNode<T>> pathStack;
+  private final ArrayDeque<TreeNode<T>> pathStack;
 
   public BstIterator(TreeNode<T> root) {
     pathStack = new ArrayDeque<>();
@@ -45,7 +47,7 @@ public class BstIterator<T extends Comparable<T>> implements Iterator<TreeNode<T
   /**
    * This BstIterator manages to use O(h) extra space, where h is the height of the tree It achieves
    * this by maintaining a stack of the nodes to handle (pushing all left nodes first), before
-   * handling self or right node
+   * handling self or right node.
    *
    * @param node TreeNode that acts as root of the subtree we're interested in.
    */
@@ -57,6 +59,8 @@ public class BstIterator<T extends Comparable<T>> implements Iterator<TreeNode<T
   }
 
   /**
+   * Checks if there exists next element.
+   *
    * @return true if this iterator has a "next" element
    */
   @Override
@@ -65,6 +69,8 @@ public class BstIterator<T extends Comparable<T>> implements Iterator<TreeNode<T
   }
 
   /**
+   * Gets the next element.
+   *
    * @return TreeNode next. The next element according to our in-order traversal of the given BST
    * @throws NoSuchElementException if this iterator does not have a next element
    */
@@ -73,7 +79,7 @@ public class BstIterator<T extends Comparable<T>> implements Iterator<TreeNode<T
     if (pathStack.isEmpty()) {
       throw new NoSuchElementException();
     }
-    TreeNode<T> next = pathStack.pop();
+    var next = pathStack.pop();
     pushPathToNextSmallest(next.getRight());
     return next;
   }

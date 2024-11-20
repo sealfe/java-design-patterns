@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +24,19 @@
  */
 package com.iluwatar.guarded.suspension;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.LinkedList;
 import java.util.Queue;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * Guarded Queue is an implementation for Guarded Suspension Pattern
- * Guarded suspension pattern is used to handle a situation when you want to execute a method
- * on an object which is not in a proper state.
+ * Guarded Queue is an implementation for Guarded Suspension Pattern Guarded suspension pattern is
+ * used to handle a situation when you want to execute a method on an object which is not in a
+ * proper state.
+ *
  * @see <a href="http://java-design-patterns.com/patterns/guarded-suspension/">http://java-design-patterns.com/patterns/guarded-suspension/</a>
  */
+@Slf4j
 public class GuardedQueue {
-  private static final Logger LOGGER = LoggerFactory.getLogger(GuardedQueue.class);
   private final Queue<Integer> sourceList;
 
   public GuardedQueue() {
@@ -43,6 +44,8 @@ public class GuardedQueue {
   }
 
   /**
+   * Get the last element of the queue if exists.
+   *
    * @return last element of a queue if queue is not empty
    */
   public synchronized Integer get() {
@@ -51,7 +54,7 @@ public class GuardedQueue {
         LOGGER.info("waiting");
         wait();
       } catch (InterruptedException e) {
-        e.printStackTrace();
+        LOGGER.error("Error occurred: ", e);
       }
     }
     LOGGER.info("getting");
@@ -59,6 +62,8 @@ public class GuardedQueue {
   }
 
   /**
+   * Put a value in the queue.
+   *
    * @param e number which we want to put to our queue
    */
   public synchronized void put(Integer e) {

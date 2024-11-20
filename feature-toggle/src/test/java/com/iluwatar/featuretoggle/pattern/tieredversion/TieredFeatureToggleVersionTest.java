@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,46 +24,46 @@
  */
 package com.iluwatar.featuretoggle.pattern.tieredversion;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.iluwatar.featuretoggle.pattern.Service;
 import com.iluwatar.featuretoggle.user.User;
 import com.iluwatar.featuretoggle.user.UserGroup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 /**
  * Test Tiered Feature Toggle
  */
-public class TieredFeatureToggleVersionTest {
+class TieredFeatureToggleVersionTest {
 
   final User paidUser = new User("Jamie Coder");
   final User freeUser = new User("Alan Defect");
   final Service service = new TieredFeatureToggleVersion();
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     UserGroup.addUserToPaidGroup(paidUser);
     UserGroup.addUserToFreeGroup(freeUser);
   }
 
   @Test
-  public void testGetWelcomeMessageForPaidUser() {
-    final String welcomeMessage = service.getWelcomeMessage(paidUser);
-    final String expected = "You're amazing Jamie Coder. Thanks for paying for this awesome software.";
+  void testGetWelcomeMessageForPaidUser() {
+    final var welcomeMessage = service.getWelcomeMessage(paidUser);
+    final var expected = "You're amazing Jamie Coder. Thanks for paying for this awesome software.";
     assertEquals(expected, welcomeMessage);
   }
 
   @Test
-  public void testGetWelcomeMessageForFreeUser() {
-    final String welcomeMessage = service.getWelcomeMessage(freeUser);
-    final String expected = "I suppose you can use this software.";
+  void testGetWelcomeMessageForFreeUser() {
+    final var welcomeMessage = service.getWelcomeMessage(freeUser);
+    final var expected = "I suppose you can use this software.";
     assertEquals(expected, welcomeMessage);
   }
 
   @Test
-  public void testIsEnhancedAlwaysTrueAsTiered() {
+  void testIsEnhancedAlwaysTrueAsTiered() {
     assertTrue(service.isEnhanced());
   }
 }

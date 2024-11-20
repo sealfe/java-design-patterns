@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,15 +24,16 @@
  */
 package com.iluwatar.datamapper;
 
+import java.io.Serial;
+
 /**
- * Using Runtime Exception for avoiding dependancy on implementation exceptions. This helps in
+ * Using Runtime Exception for avoiding dependency on implementation exceptions. This helps in
  * decoupling.
- * 
- * @author amit.dixit
  *
  */
 public final class DataMapperException extends RuntimeException {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   /**
@@ -38,7 +41,7 @@ public final class DataMapperException extends RuntimeException {
    * initialized, and may subsequently be initialized by a call to {@link #initCause}.
    *
    * @param message the detail message. The detail message is saved for later retrieval by the
-   *        {@link #getMessage()} method.
+   *                {@link #getMessage()} method.
    */
   public DataMapperException(final String message) {
     super(message);

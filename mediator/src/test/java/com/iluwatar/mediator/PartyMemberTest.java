@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,50 +24,48 @@
  */
 package com.iluwatar.mediator;
 
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.AppenderBase;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.function.Supplier;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-/**
- * Date: 12/19/15 - 10:13 PM
- *
- * @author Jeroen Meulemeester
- */
-public class PartyMemberTest {
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.AppenderBase;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.slf4j.LoggerFactory;
 
-  static Collection<Supplier<PartyMember>[]> dataProvider() {
-    return Arrays.asList(
-            new Supplier[]{Hobbit::new},
-            new Supplier[]{Hunter::new},
-            new Supplier[]{Rogue::new},
-            new Supplier[]{Wizard::new}
+/**
+ * PartyMemberTest
+ *
+ */
+class PartyMemberTest {
+
+  static Stream<Arguments> dataProvider() {
+    return Stream.of(
+        Arguments.of((Supplier<PartyMember>) Hobbit::new),
+        Arguments.of((Supplier<PartyMember>) Hunter::new),
+        Arguments.of((Supplier<PartyMember>) Rogue::new),
+        Arguments.of((Supplier<PartyMember>) Wizard::new)
     );
   }
 
   private InMemoryAppender appender;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     appender = new InMemoryAppender(PartyMemberBase.class);
   }
 
   @AfterEach
-  public void tearDown() {
+  void tearDown() {
     appender.stop();
   }
 
@@ -74,12 +74,12 @@ public class PartyMemberTest {
    */
   @ParameterizedTest
   @MethodSource("dataProvider")
-  public void testPartyAction(Supplier<PartyMember> memberSupplier) {
-    final PartyMember member = memberSupplier.get();
+  void testPartyAction(Supplier<PartyMember> memberSupplier) {
+    final var member = memberSupplier.get();
 
-    for (final Action action : Action.values()) {
+    for (final var action : Action.values()) {
       member.partyAction(action);
-      assertEquals(member.toString() + " " + action.getDescription(), appender.getLastMessage());
+      assertEquals(member + " " + action.getDescription(), appender.getLastMessage());
     }
 
     assertEquals(Action.values().length, appender.getLogSize());
@@ -90,19 +90,19 @@ public class PartyMemberTest {
    */
   @ParameterizedTest
   @MethodSource("dataProvider")
-  public void testAct(Supplier<PartyMember> memberSupplier) {
-    final PartyMember member = memberSupplier.get();
+  void testAct(Supplier<PartyMember> memberSupplier) {
+    final var member = memberSupplier.get();
 
     member.act(Action.GOLD);
     assertEquals(0, appender.getLogSize());
 
-    final Party party = mock(Party.class);
+    final var party = mock(Party.class);
     member.joinedParty(party);
-    assertEquals(member.toString() + " joins the party", appender.getLastMessage());
+    assertEquals(member + " joins the party", appender.getLastMessage());
 
-    for (final Action action : Action.values()) {
+    for (final var action : Action.values()) {
       member.act(action);
-      assertEquals(member.toString() + " " + action.toString(), appender.getLastMessage());
+      assertEquals(member + " " + action.toString(), appender.getLastMessage());
       verify(party).act(member, action);
     }
 
@@ -114,16 +114,16 @@ public class PartyMemberTest {
    */
   @ParameterizedTest
   @MethodSource("dataProvider")
-  public void testToString(Supplier<PartyMember> memberSupplier) throws Exception {
-    final PartyMember member = memberSupplier.get();
-    final Class<? extends PartyMember> memberClass = member.getClass();
+  void testToString(Supplier<PartyMember> memberSupplier) {
+    final var member = memberSupplier.get();
+    final var memberClass = member.getClass();
     assertEquals(memberClass.getSimpleName(), member.toString());
   }
 
-  private class InMemoryAppender extends AppenderBase<ILoggingEvent> {
-    private List<ILoggingEvent> log = new LinkedList<>();
+  private static class InMemoryAppender extends AppenderBase<ILoggingEvent> {
+    private final List<ILoggingEvent> log = new LinkedList<>();
 
-    public InMemoryAppender(Class clazz) {
+    public InMemoryAppender(Class<?> clazz) {
       ((Logger) LoggerFactory.getLogger(clazz)).addAppender(this);
       start();
     }

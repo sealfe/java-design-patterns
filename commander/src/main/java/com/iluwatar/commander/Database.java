@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +27,14 @@ package com.iluwatar.commander;
 import com.iluwatar.commander.exceptions.DatabaseUnavailableException;
 
 /**
- * Database abstract class is extended by all databases in our example. The add and get
- * methods are used by the respective service to add to database or get from database.
+ * Database abstract class is extended by all databases in our example. The add and get methods are
+ * used by the respective service to add to database or get from database.
+ *
  * @param <T> T is the type of object being held by database.
  */
 
 public abstract class Database<T> {
   public abstract T add(T obj) throws DatabaseUnavailableException;
-  public abstract T get(String tId) throws DatabaseUnavailableException;
+
+  public abstract T get(String id) throws DatabaseUnavailableException;
 }

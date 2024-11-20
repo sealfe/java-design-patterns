@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,46 +24,42 @@
  */
 package com.iluwatar.featuretoggle.user;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Test;
+
 /**
  * Test User Group specific feature
  */
-public class UserGroupTest {
+class UserGroupTest {
 
   @Test
-  public void testAddUserToFreeGroup() throws Exception {
-    User user = new User("Free User");
+  void testAddUserToFreeGroup() {
+    var user = new User("Free User");
     UserGroup.addUserToFreeGroup(user);
     assertFalse(UserGroup.isPaid(user));
   }
 
   @Test
-  public void testAddUserToPaidGroup() throws Exception {
-    User user = new User("Paid User");
+  void testAddUserToPaidGroup() {
+    var user = new User("Paid User");
     UserGroup.addUserToPaidGroup(user);
     assertTrue(UserGroup.isPaid(user));
   }
 
   @Test
-  public void testAddUserToPaidWhenOnFree() throws Exception {
-    User user = new User("Paid User");
+  void testAddUserToPaidWhenOnFree() {
+    var user = new User("Paid User");
     UserGroup.addUserToFreeGroup(user);
-    assertThrows(IllegalArgumentException.class, () -> {
-      UserGroup.addUserToPaidGroup(user);
-    });
+    assertThrows(IllegalArgumentException.class, () -> UserGroup.addUserToPaidGroup(user));
   }
 
   @Test
-  public void testAddUserToFreeWhenOnPaid() throws Exception {
-    User user = new User("Free User");
+  void testAddUserToFreeWhenOnPaid() {
+    var user = new User("Free User");
     UserGroup.addUserToPaidGroup(user);
-    assertThrows(IllegalArgumentException.class, () -> {
-      UserGroup.addUserToFreeGroup(user);
-    });
+    assertThrows(IllegalArgumentException.class, () -> UserGroup.addUserToFreeGroup(user));
   }
 }

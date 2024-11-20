@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,16 +24,14 @@
  */
 package com.iluwatar.interpreter;
 
+import java.util.stream.Stream;
 import org.junit.jupiter.params.provider.Arguments;
 
-import java.util.stream.Stream;
-
 /**
- * Date: 12/14/15 - 12:08 PM
+ * PlusExpressionTest
  *
- * @author Jeroen Meulemeester
  */
-public class PlusExpressionTest extends ExpressionTest<PlusExpression> {
+class PlusExpressionTest extends ExpressionTest<PlusExpression> {
 
   /**
    * Create a new set of test entries with the expected result
@@ -40,7 +40,7 @@ public class PlusExpressionTest extends ExpressionTest<PlusExpression> {
    */
   @Override
   public Stream<Arguments> expressionProvider() {
-    return prepareParameters((f, s) -> f + s);
+    return prepareParameters(Integer::sum);
   }
 
   /**

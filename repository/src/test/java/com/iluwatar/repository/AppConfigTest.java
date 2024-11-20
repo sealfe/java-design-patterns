@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +24,11 @@
  */
 package com.iluwatar.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.sql.SQLException;
+import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,20 +36,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 /**
  * This case is Just for test the Annotation Based configuration
- * 
  */
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = { AppConfig.class })
-public class AppConfigTest {
+@SpringBootTest(classes = {AppConfig.class})
+class AppConfigTest {
 
   @Autowired
   DataSource dataSource;
@@ -51,7 +50,7 @@ public class AppConfigTest {
    * Test for bean instance
    */
   @Test
-  public void testDataSource() {
+  void testDataSource() {
     assertNotNull(dataSource);
   }
 
@@ -60,15 +59,16 @@ public class AppConfigTest {
    */
   @Test
   @Transactional
-  public void testQuery() throws SQLException {
-    ResultSet resultSet = dataSource.getConnection().createStatement().executeQuery("SELECT 1");
-    String result = null;
-    String expected = "1";
-    while (resultSet.next()) {
-      result = resultSet.getString(1);
-
+  void testQuery() throws SQLException {
+    String expected;
+    String result;
+    try (var resultSet = dataSource.getConnection().createStatement().executeQuery("SELECT 1")) {
+      expected = "1";
+      result = null;
+      while (resultSet.next()) {
+        result = resultSet.getString(1);
+      }
     }
     assertEquals(expected, result);
   }
-
 }

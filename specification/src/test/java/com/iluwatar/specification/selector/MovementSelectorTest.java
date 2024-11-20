@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,34 +24,33 @@
  */
 package com.iluwatar.specification.selector;
 
-import com.iluwatar.specification.creature.Creature;
-import com.iluwatar.specification.property.Movement;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.iluwatar.specification.creature.Creature;
+import com.iluwatar.specification.property.Movement;
+import org.junit.jupiter.api.Test;
+
 /**
- * Date: 12/29/15 - 7:37 PM
+ * MovementSelectorTest
  *
- * @author Jeroen Meulemeester
  */
-public class MovementSelectorTest {
+class MovementSelectorTest {
 
   /**
-   * Verify if the movement selector gives the correct results
+   * Verify if the movement selector gives the correct results.
    */
   @Test
-  public void testMovement() {
-    final Creature swimmingCreature = mock(Creature.class);
+  void testMovement() {
+    final var swimmingCreature = mock(Creature.class);
     when(swimmingCreature.getMovement()).thenReturn(Movement.SWIMMING);
 
-    final Creature flyingCreature = mock(Creature.class);
+    final var flyingCreature = mock(Creature.class);
     when(flyingCreature.getMovement()).thenReturn(Movement.FLYING);
 
-    final MovementSelector swimmingSelector = new MovementSelector(Movement.SWIMMING);
+    final var swimmingSelector = new MovementSelector(Movement.SWIMMING);
     assertTrue(swimmingSelector.test(swimmingCreature));
     assertFalse(swimmingSelector.test(flyingCreature));
 

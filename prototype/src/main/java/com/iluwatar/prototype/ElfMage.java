@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,27 +24,21 @@
  */
 package com.iluwatar.prototype;
 
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+
 /**
- * 
- * ElfMage
- *
+ * ElfMage.
  */
+@EqualsAndHashCode(callSuper = true)
+@RequiredArgsConstructor
 public class ElfMage extends Mage {
 
-  
-  private String helpType;
-  
-  public ElfMage(String helpType) {
-    this.helpType = helpType;
-  }
+  private final String helpType;
 
   public ElfMage(ElfMage elfMage) {
+    super(elfMage);
     this.helpType = elfMage.helpType;
-  }
-
-  @Override
-  public ElfMage copy() {
-    return new ElfMage(this);
   }
 
   @Override

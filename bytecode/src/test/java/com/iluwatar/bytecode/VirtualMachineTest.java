@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,24 +24,24 @@
  */
 package com.iluwatar.bytecode;
 
-import org.junit.jupiter.api.Test;
-
 import static com.iluwatar.bytecode.Instruction.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.Test;
+
 /**
- * Test for {@Link VirtualMachine}
+ * Test for {@link VirtualMachine}
  */
-public class VirtualMachineTest {
+class VirtualMachineTest {
 
   @Test
-  public void testLiteral() {
-    int[] bytecode = new int[2];
+  void testLiteral() {
+    var bytecode = new int[2];
     bytecode[0] = LITERAL.getIntValue();
     bytecode[1] = 10;
 
-    VirtualMachine vm = new VirtualMachine();
+    var vm = new VirtualMachine();
     vm.execute(bytecode);
 
     assertEquals(1, vm.getStack().size());
@@ -47,81 +49,81 @@ public class VirtualMachineTest {
   }
 
   @Test
-  public void testSetHealth() {
-    int wizardNumber = 0;
-    int[] bytecode = new int[5];
+  void testSetHealth() {
+    var wizardNumber = 0;
+    var bytecode = new int[5];
     bytecode[0] = LITERAL.getIntValue();
     bytecode[1] = wizardNumber;
     bytecode[2] = LITERAL.getIntValue();
     bytecode[3] = 50;                        // health amount
     bytecode[4] = SET_HEALTH.getIntValue();
 
-    VirtualMachine vm = new VirtualMachine();
+    var vm = new VirtualMachine();
     vm.execute(bytecode);
 
     assertEquals(50, vm.getWizards()[wizardNumber].getHealth());
   }
 
   @Test
-  public void testSetAgility() {
-    int wizardNumber = 0;
-    int[] bytecode = new int[5];
+  void testSetAgility() {
+    var wizardNumber = 0;
+    var bytecode = new int[5];
     bytecode[0] = LITERAL.getIntValue();
     bytecode[1] = wizardNumber;
     bytecode[2] = LITERAL.getIntValue();
     bytecode[3] = 50;                        // agility amount
     bytecode[4] = SET_AGILITY.getIntValue();
 
-    VirtualMachine vm = new VirtualMachine();
+    var vm = new VirtualMachine();
     vm.execute(bytecode);
 
     assertEquals(50, vm.getWizards()[wizardNumber].getAgility());
   }
 
   @Test
-  public void testSetWisdom() {
-    int wizardNumber = 0;
-    int[] bytecode = new int[5];
+  void testSetWisdom() {
+    var wizardNumber = 0;
+    var bytecode = new int[5];
     bytecode[0] = LITERAL.getIntValue();
     bytecode[1] = wizardNumber;
     bytecode[2] = LITERAL.getIntValue();
     bytecode[3] = 50;                        // wisdom amount
     bytecode[4] = SET_WISDOM.getIntValue();
 
-    VirtualMachine vm = new VirtualMachine();
+    var vm = new VirtualMachine();
     vm.execute(bytecode);
 
     assertEquals(50, vm.getWizards()[wizardNumber].getWisdom());
   }
 
   @Test
-  public void testGetHealth() {
-    int wizardNumber = 0;
-    int[] bytecode = new int[8];
+  void testGetHealth() {
+    var wizardNumber = 0;
+    var bytecode = new int[8];
     bytecode[0] = LITERAL.getIntValue();
     bytecode[1] = wizardNumber;
     bytecode[2] = LITERAL.getIntValue();
     bytecode[3] = 50;                        // health amount
     bytecode[4] = SET_HEALTH.getIntValue();
-    bytecode[5] = LITERAL.getIntValue();;
+    bytecode[5] = LITERAL.getIntValue();
     bytecode[6] = wizardNumber;
     bytecode[7] = GET_HEALTH.getIntValue();
 
-    VirtualMachine vm = new VirtualMachine();
+    var vm = new VirtualMachine();
     vm.execute(bytecode);
 
     assertEquals(Integer.valueOf(50), vm.getStack().pop());
   }
 
   @Test
-  public void testPlaySound() {
-    int wizardNumber = 0;
-    int[] bytecode = new int[3];
+  void testPlaySound() {
+    var wizardNumber = 0;
+    var bytecode = new int[3];
     bytecode[0] = LITERAL.getIntValue();
     bytecode[1] = wizardNumber;
     bytecode[2] = PLAY_SOUND.getIntValue();
 
-    VirtualMachine vm = new VirtualMachine();
+    var vm = new VirtualMachine();
     vm.execute(bytecode);
 
     assertEquals(0, vm.getStack().size());
@@ -129,14 +131,14 @@ public class VirtualMachineTest {
   }
 
   @Test
-  public void testSpawnParticles() {
-    int wizardNumber = 0;
-    int[] bytecode = new int[3];
+  void testSpawnParticles() {
+    var wizardNumber = 0;
+    var bytecode = new int[3];
     bytecode[0] = LITERAL.getIntValue();
     bytecode[1] = wizardNumber;
     bytecode[2] = SPAWN_PARTICLES.getIntValue();
 
-    VirtualMachine vm = new VirtualMachine();
+    var vm = new VirtualMachine();
     vm.execute(bytecode);
 
     assertEquals(0, vm.getStack().size());
@@ -144,10 +146,10 @@ public class VirtualMachineTest {
   }
 
   @Test
-  public void testInvalidInstruction() {
-    int[] bytecode = new int[1];
+  void testInvalidInstruction() {
+    var bytecode = new int[1];
     bytecode[0] = 999;
-    VirtualMachine vm = new VirtualMachine();
+    var vm = new VirtualMachine();
 
     assertThrows(IllegalArgumentException.class, () -> vm.execute(bytecode));
   }

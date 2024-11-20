@@ -1,188 +1,222 @@
 ---
-layout: pattern
-title: CircuitBreaker
-folder: circuit-breaker
-permalink: /patterns/circuit-breaker/
-categories: Other
-tags:
- - Java
- - Performance
- - Difficulty-Intermediate
+title: "Circuit Breaker Pattern in Java: Enhancing System Resilience"
+shortTitle: Circuit Breaker
+description: "Learn about the Circuit Breaker pattern in Java design, which ensures fault tolerance and prevents cascading failures in distributed systems and microservices architectures."
+category: Resilience
+language: en
+tag:
+  - Cloud distributed
+  - Fault tolerance
+  - Microservices
+  - Retry
 ---
 
-## Intent
+## Also known as
 
-Handle costly remote *procedure/service* calls in such a way that the failure of a **single** service/component cannot bring the whole application down, and we can reconnect to the service as soon as possible.
+* Fault Tolerance Switch
 
-## Explanation
+## Intent of Circuit Breaker Design Pattern
 
-Real world example
+The Circuit Breaker pattern is a critical Java design pattern that helps ensure fault tolerance and resilience in microservices and distributed systems. Using Circuit Breaker, it is possible to prevent a system from repeatedly trying to execute an operation likely to fail, allowing it to recover from faults and prevent cascading failures.
 
-> Imagine a Web App that has both local (example: files and images) and remote (example: database entries) to serve. The database might not be responding due to a variety of reasons, so if the application keeps trying to read from the database using multiple threads/processes, soon all of them will hang and our entire web application will crash. We should be able to detect this situation and show the user an appropriate message so that he/she can explore other parts of the app unaffected by the database failure without any problem. 
+## Detailed Explanation of Circuit Breaker Pattern with Real-World Examples
+
+Real-world example
+
+> Consider a real-world example of an e-commerce website that depends on multiple external payment gateways to process transactions. If one of the payment gateways becomes unresponsive or slow, the Circuit Breaker pattern can be used to detect the failure and prevent the system from repeatedly attempting to use the problematic gateway. Instead, it can quickly switch to alternative payment gateways or display an error message to the user, ensuring that the rest of the website remains functional and responsive. This avoids resource exhaustion and provides a better user experience by allowing transactions to be processed through other available services. This way, the Circuit Breaker pattern handles external API failures, ensuring the system remains functional.
 
 In plain words
 
-> Allows us to save resources when we know a remote service failed. Useful when all parts of our application are highly decoupled from each other, and failure of one component doesn't mean the other parts will stop working.
+> Circuit Breaker allows graceful handling of failed remote services. It's especially useful when all parts of our application are highly decoupled from each other, and failure of one component doesn't mean the other parts will stop working.
 
 Wikipedia says
 
-> **Circuit breaker** is a design pattern used in modern software development. It is used to detect failures and encapsulates the logic of preventing a failure from constantly recurring, during maintenance, temporary external system failure or unexpected system difficulties.
+> Circuit breaker is a design pattern used in modern software development. It is used to detect failures and encapsulates the logic of preventing a failure from constantly recurring, during maintenance, temporary external system failure or unexpected system difficulties.
 
-So, how does this all come together?
+## Programmatic Example of Circuit Breaker Pattern in Java
 
-## Programmatic Example
-With the above example in mind we will imitate the functionality in a simple manner. We have two services: A *monitoring service* which will mimic the web app and will make both **local** and **remote** calls.
+This Java example demonstrates how the Circuit Breaker pattern can manage remote service failures and maintain system stability.
 
-The service architecture is as follows:
+Imagine a web application that uses both local files/images and remote services to fetch data. Remote services can become slow or unresponsive, which may cause the application to hang due to thread starvation. The Circuit Breaker pattern can help detect such failures and allow the application to degrade gracefully.
 
-![alt text](./etc/ServiceDiagram.PNG "Service Diagram")
-
-In terms of code, the End user application is:
+1. **Simulating a Delayed Remote Service**
 
 ```java
-public class App {
-   
-  private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
-    
-  public static void main(String[] args) {
-    var obj = new MonitoringService();
-    var circuitBreaker = new CircuitBreaker(3000, 1, 2000 * 1000 * 1000); 
+// The DelayedRemoteService simulates a remote service that responds after a certain delay.
+var delayedService = new DelayedRemoteService(serverStartTime, 5);
+```
+
+2. **Setting Up the Circuit Breaker**
+
+```java
+// The DefaultCircuitBreaker wraps the remote service and monitors for failures.
+var delayedServiceCircuitBreaker = new DefaultCircuitBreaker(delayedService, 3000, 2, 2000 * 1000 * 1000);
+```
+
+3. **Monitoring Service to Handle Requests**
+
+```java
+// The MonitoringService is responsible for calling the remote services.
+var monitoringService = new MonitoringService(delayedServiceCircuitBreaker, quickServiceCircuitBreaker);
+
+// Fetch response from local resource
+LOGGER.info(monitoringService.localResourceResponse());
+
+// Fetch response from delayed service 2 times to meet the failure threshold
+LOGGER.info(monitoringService.delayedServiceResponse());
+LOGGER.info(monitoringService.delayedServiceResponse());
+```
+
+4. **Handling Circuit Breaker States**
+
+```java
+// Fetch current state of delayed service circuit breaker after crossing failure threshold limit
+LOGGER.info(delayedServiceCircuitBreaker.getState()); // Should be OPEN
+
+// Meanwhile, the delayed service is down, fetch response from the healthy quick service
+LOGGER.info(monitoringService.quickServiceResponse());
+LOGGER.info(quickServiceCircuitBreaker.getState());
+```
+
+5. **Recovering from Failure**
+
+```java
+// Wait for the delayed service to become responsive
+try {
+  LOGGER.info("Waiting for delayed service to become responsive");
+  Thread.sleep(5000);
+} catch (InterruptedException e) {
+  LOGGER.error("An error occurred: ", e);
+}
+
+// Check the state of delayed circuit breaker, should be HALF_OPEN
+LOGGER.info(delayedServiceCircuitBreaker.getState());
+
+// Fetch response from delayed service, which should be healthy by now
+LOGGER.info(monitoringService.delayedServiceResponse());
+
+// As successful response is fetched, it should be CLOSED again.
+LOGGER.info(delayedServiceCircuitBreaker.getState());
+```
+
+6. **Full example**
+
+```java
+public static void main(String[] args) {
+
     var serverStartTime = System.nanoTime();
-    while (true) {
-      LOGGER.info(obj.localResourceResponse());
-      LOGGER.info(obj.remoteResourceResponse(circuitBreaker, serverStartTime));
-      LOGGER.info(circuitBreaker.getState());
-      try {
-        Thread.sleep(5 * 1000); 
-      } catch (InterruptedException e) {
-        LOGGER.error(e.getMessage());
-      }
-    }
-  }
-}
-```
 
-The monitoring service is: 
+    var delayedService = new DelayedRemoteService(serverStartTime, 5);
+    var delayedServiceCircuitBreaker = new DefaultCircuitBreaker(delayedService, 3000, 2,
+        2000 * 1000 * 1000);
 
-``` java
-public class MonitoringService {
+    var quickService = new QuickRemoteService();
+    var quickServiceCircuitBreaker = new DefaultCircuitBreaker(quickService, 3000, 2,
+        2000 * 1000 * 1000);
 
-  public String localResourceResponse() {
-    return "Local Service is working";
-  }
+    //Create an object of monitoring service which makes both local and remote calls
+    var monitoringService = new MonitoringService(delayedServiceCircuitBreaker,
+        quickServiceCircuitBreaker);
 
-  public String remoteResourceResponse(CircuitBreaker circuitBreaker, long serverStartTime) {
+    //Fetch response from local resource
+    LOGGER.info(monitoringService.localResourceResponse());
+
+    //Fetch response from delayed service 2 times, to meet the failure threshold
+    LOGGER.info(monitoringService.delayedServiceResponse());
+    LOGGER.info(monitoringService.delayedServiceResponse());
+
+    //Fetch current state of delayed service circuit breaker after crossing failure threshold limit
+    //which is OPEN now
+    LOGGER.info(delayedServiceCircuitBreaker.getState());
+
+    //Meanwhile, the delayed service is down, fetch response from the healthy quick service
+    LOGGER.info(monitoringService.quickServiceResponse());
+    LOGGER.info(quickServiceCircuitBreaker.getState());
+
+    //Wait for the delayed service to become responsive
     try {
-      return circuitBreaker.call("delayedService", serverStartTime);
-    } catch (Exception e) {
-      return e.getMessage();
+      LOGGER.info("Waiting for delayed service to become responsive");
+      Thread.sleep(5000);
+    } catch (InterruptedException e) {
+      LOGGER.error("An error occurred: ", e);
     }
-  }
-}
-```
-As it can be seen, it does the call to get local resources directly, but it wraps the call to remote (costly) service in a circuit breaker object, which prevents faults as follows:
+    //Check the state of delayed circuit breaker, should be HALF_OPEN
+    LOGGER.info(delayedServiceCircuitBreaker.getState());
 
-```java
-public class CircuitBreaker {
-  private final long timeout;
-  private final long retryTimePeriod;
-  long lastFailureTime;
-  int failureCount;
-  private final int failureThreshold;
-  private State state;
-  private final long futureTime = 1000 * 1000 * 1000 * 1000;
-
-  CircuitBreaker(long timeout, int failureThreshold, long retryTimePeriod) {
-    this.state = State.CLOSED;
-    this.failureThreshold = failureThreshold;
-    this.timeout = timeout;
-    this.retryTimePeriod = retryTimePeriod;
-    this.lastFailureTime = System.nanoTime() + futureTime;
-    this.failureCount = 0;
-  }
-    
-  private void reset() {
-    this.failureCount = 0;
-    this.lastFailureTime = System.nanoTime() + futureTime; 
-    this.state = State.CLOSED;
-  }
-
-  private void recordFailure() {
-    failureCount = failureCount + 1;
-    this.lastFailureTime = System.nanoTime();
-  }
-    
-  protected void setState() {
-    if (failureCount > failureThreshold) { 
-      if ((System.nanoTime() - lastFailureTime) > retryTimePeriod) {
-        state = State.HALF_OPEN;
-      } else {
-        state = State.OPEN;
-      }
-    } else {
-      state = State.CLOSED;
-    }
-  }
-    
-  public String getState() {
-    return state.name();
-  }
-  
-  public void setStateForBypass(State state) {
-    this.state = state;
-  }
-   
-  public String call(String serviceToCall, long serverStartTime) throws Exception {
-    setState();
-    if (state == State.OPEN) {
-      return "This is stale response from API";
-    } else {
-      if (serviceToCall.equals("delayedService")) {
-        var delayedService = new DelayedService(20);
-        var response = delayedService.response(serverStartTime);
-        if (response.split(" ")[3].equals("working")) {
-          reset();
-          return response;
-        } else {
-          recordFailure();
-          throw new Exception("Remote service not responding");
-        }
-      } else {
-        throw new Exception("Unknown Service Name");
-      }
-    }
-  }
+    //Fetch response from delayed service, which should be healthy by now
+    LOGGER.info(monitoringService.delayedServiceResponse());
+    //As successful response is fetched, it should be CLOSED again.
+    LOGGER.info(delayedServiceCircuitBreaker.getState());
 }
 ```
 
-How does the above pattern prevent failures? Let's understand via this finite state machine implemented by it.
+Summary of the example
 
-![alt text](./etc/StateDiagram.PNG "State Diagram")
+- Initialize the Circuit Breaker with parameters: `timeout`, `failureThreshold`, and `retryTimePeriod`.
+- Start in the `closed` state.
+- On successful calls, reset the state.
+- On failures exceeding the threshold, transition to the `open` state to prevent further calls.
+- After the retry timeout, transition to the `half-open` state to test the service.
+- On success in `half-open` state, transition back to `closed`. On failure, return to `open`.
 
-- We initialize the Circuit Breaker object with certain parameters: **timeout**, **failureThreshold** and **retryTimePeriod** which help determine how resilient the API is.
-- Initially, we are in the **closed** state and the remote call to API happens.
-- Every time the call succeeds, we reset the state to as it was in the beginning.
-- If the number of failures cross a certain threshold, we move to the **open** state, which acts just like an open circuit and prevents remote service calls from being made, thus saving resources. (Here, we return the response called ```stale response from API```)
-- Once we exceed the retry timeout period, we move to the **half-open** state and make another call to the remote service again to check if the service is working so that we can serve fresh content. A *failure* sets it back to **open** state and another attempt is made after retry timeout period, while a *success* sets it to **closed** state so that everything starts working normally again. 
+Program output:
 
+```
+16:59:19.767 [main] INFO com.iluwatar.circuitbreaker.App -- Local Service is working
+16:59:19.769 [main] INFO com.iluwatar.circuitbreaker.App -- Delayed service is down
+16:59:19.769 [main] INFO com.iluwatar.circuitbreaker.App -- Delayed service is down
+16:59:19.769 [main] INFO com.iluwatar.circuitbreaker.App -- OPEN
+16:59:19.769 [main] INFO com.iluwatar.circuitbreaker.App -- Quick Service is working
+16:59:19.769 [main] INFO com.iluwatar.circuitbreaker.App -- CLOSED
+16:59:19.769 [main] INFO com.iluwatar.circuitbreaker.App -- Waiting for delayed service to become responsive
+16:59:24.779 [main] INFO com.iluwatar.circuitbreaker.App -- HALF_OPEN
+16:59:24.780 [main] INFO com.iluwatar.circuitbreaker.App -- Delayed service is working
+16:59:24.780 [main] INFO com.iluwatar.circuitbreaker.App -- CLOSED
+```
 
-## Applicability
-Use the Circuit Breaker pattern when
+This example demonstrates how the Circuit Breaker pattern can help maintain application stability and resilience by managing remote service failures.
 
-- Building a fault-tolerant application where failure of some services shouldn't bring the entire application down.
-- Building an continuously incremental/continuous delivery application, as some of it's components can be upgraded without shutting it down entirely.
+## When to Use the Circuit Breaker Pattern in Java
 
-## Related Patterns
+The Circuit Breaker pattern is applicable:
 
-- [Retry Pattern](https://github.com/iluwatar/java-design-patterns/tree/master/retry)
+* In distributed systems where individual service failures can lead to cascading system-wide failures
+* For applications that interact with third-party services or databases that might become unresponsive or slow
+* In microservices architectures where the failure of one service can affect the availability of others
 
-## Real world examples
+## Real-World Applications of Circuit Breaker Pattern in Java
+
+* Cloud-based services to gracefully handle the failure of external services
+* E-commerce platforms to manage high volumes of transactions and dependency on external APIs
+* Microservices architectures for maintaining system stability and responsiveness
 * [Spring Circuit Breaker module](https://spring.io/guides/gs/circuit-breaker)
 * [Netflix Hystrix API](https://github.com/Netflix/Hystrix)
 
-## Credits
+## Benefits and Trade-offs of Circuit Breaker Pattern
 
-* [Understanding Circuit Breaker Pattern](https://itnext.io/understand-circuitbreaker-design-pattern-with-simple-practical-example-92a752615b42)
-* [Martin Fowler on Circuit Breaker](https://martinfowler.com/bliki/CircuitBreaker.html)
-* [Fault tolerance in a high volume, distributed system](https://medium.com/netflix-techblog/fault-tolerance-in-a-high-volume-distributed-system-91ab4faae74a)
-* [Microsoft docs](https://docs.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker)
+Benefits:
+
+* Prevents the system from performing futile operations that are likely to fail, thus saving resources
+* Helps in maintaining the system stability and performance of the application during partial system failures
+* Facilitates faster system recovery by avoiding the overwhelming of failing services with repeated requests
+
+Trade-Offs:
+
+* The complexity of the system increases as the pattern requires additional logic to detect failures and manage the state of the circuit breaker
+* May lead to system degradation if not properly configured, as legitimate requests might be blocked if the circuit is open
+* Requires careful tuning of thresholds and timeout periods to balance between responsiveness and protection
+
+## Related Patterns
+
+- Bulkhead: Can be used to isolate different parts of the system to prevent failures from spreading across the system
+- [Retry Pattern](https://github.com/iluwatar/java-design-patterns/tree/master/retry): Can be used in conjunction with the Circuit Breaker pattern to retry failed operations before opening the circuit
+
+## References and Credits
+
+* [Building Microservices: Designing Fine-Grained Systems](https://amzn.to/43Dx86g)
+* [Microservices Patterns: With examples in Java](https://amzn.to/3xaZwk0)
+* [Release It! Design and Deploy Production-Ready Software](https://amzn.to/4aqTNEP)
+* [Understand CircuitBreaker Design Pattern with Simple Practical Example (ITNEXT)](https://itnext.io/understand-circuitbreaker-design-pattern-with-simple-practical-example-92a752615b42)
+* [Circuit Breaker (Martin Fowler)](https://martinfowler.com/bliki/CircuitBreaker.html)
+* [Fault tolerance in a high volume, distributed system (Netflix)](https://medium.com/netflix-techblog/fault-tolerance-in-a-high-volume-distributed-system-91ab4faae74a)
+* [Circuit Breaker pattern (Microsoft)](https://docs.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker)

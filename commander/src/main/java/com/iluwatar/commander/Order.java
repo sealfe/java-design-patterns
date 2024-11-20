@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +24,9 @@
  */
 package com.iluwatar.commander;
 
-import java.util.Hashtable;
-import java.util.Random;
+import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Order class holds details of the order.
@@ -32,20 +35,26 @@ import java.util.Random;
 public class Order { //can store all transactions ids also
 
   enum PaymentStatus {
-    NotDone, Trying, Done
-  };
-  
+    NOT_DONE,
+    TRYING,
+    DONE
+  }
+
   enum MessageSent {
-    NoneSent, PaymentFail, PaymentTrying, PaymentSuccessful
-  };
+    NONE_SENT,
+    PAYMENT_FAIL,
+    PAYMENT_TRYING,
+    PAYMENT_SUCCESSFUL
+  }
 
   final User user;
   final String item;
   public final String id;
   final float price;
   final long createdTime;
+  private static final SecureRandom RANDOM = new SecureRandom();
   private static final String ALL_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-  private static final Hashtable<String, Boolean> USED_IDS = new Hashtable<String, Boolean>();
+  private static final Map<String, Boolean> USED_IDS = new HashMap<>();
   PaymentStatus paid;
   MessageSent messageSent; //to avoid sending error msg on page and text more than once
   boolean addedToEmployeeHandle; //to avoid creating more to enqueue
@@ -63,19 +72,18 @@ public class Order { //can store all transactions ids also
     }
     this.id = id;
     USED_IDS.put(this.id, true);
-    this.paid = PaymentStatus.Trying;
-    this.messageSent = MessageSent.NoneSent;
+    this.paid = PaymentStatus.TRYING;
+    this.messageSent = MessageSent.NONE_SENT;
     this.addedToEmployeeHandle = false;
   }
 
-  String createUniqueId() {
+  private String createUniqueId() {
     StringBuilder random = new StringBuilder();
-    Random rand = new Random();
     while (random.length() < 12) { // length of the random string.
-      int index = (int) (rand.nextFloat() * ALL_CHARS.length());
+      int index = (int) (RANDOM.nextFloat() * ALL_CHARS.length());
       random.append(ALL_CHARS.charAt(index));
     }
     return random.toString();
   }
-  
+
 }

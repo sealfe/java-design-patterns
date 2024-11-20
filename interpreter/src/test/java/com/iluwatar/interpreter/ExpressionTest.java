@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,27 +24,22 @@
  */
 package com.iluwatar.interpreter;
 
-import org.junit.jupiter.api.Disabled;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.ArrayList;
+import java.util.function.BiFunction;
+import java.util.function.IntBinaryOperator;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.IntBinaryOperator;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 /**
- * Date: 12/14/15 - 11:48 AM
- *
  * Test Case for Expressions
+ *
  * @param <E> Type of Expression
- * @author Jeroen Meulemeester
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class ExpressionTest<E extends Expression> {
@@ -54,13 +51,13 @@ public abstract class ExpressionTest<E extends Expression> {
    * @return A stream with test entries
    */
   static Stream<Arguments> prepareParameters(final IntBinaryOperator resultCalc) {
-    final List<Arguments> testData = new ArrayList<>();
-    for (int i = -10; i < 10; i++) {
-      for (int j = -10; j < 10; j++) {
+    final var testData = new ArrayList<Arguments>();
+    for (var i = -10; i < 10; i++) {
+      for (var j = -10; j < 10; j++) {
         testData.add(Arguments.of(
-                new NumberExpression(i),
-                new NumberExpression(j),
-                resultCalc.applyAsInt(i, j)
+            new NumberExpression(i),
+            new NumberExpression(j),
+            resultCalc.applyAsInt(i, j)
         ));
       }
     }
@@ -102,8 +99,8 @@ public abstract class ExpressionTest<E extends Expression> {
    */
   @ParameterizedTest
   @MethodSource("expressionProvider")
-  public void testInterpret(NumberExpression first, NumberExpression second, int result) {
-    final E expression = factory.apply(first, second);
+  void testInterpret(NumberExpression first, NumberExpression second, int result) {
+    final var expression = factory.apply(first, second);
     assertNotNull(expression);
     assertEquals(result, expression.interpret());
   }
@@ -113,8 +110,8 @@ public abstract class ExpressionTest<E extends Expression> {
    */
   @ParameterizedTest
   @MethodSource("expressionProvider")
-  public void testToString(NumberExpression first, NumberExpression second) {
-    final E expression = factory.apply(first, second);
+  void testToString(NumberExpression first, NumberExpression second) {
+    final var expression = factory.apply(first, second);
     assertNotNull(expression);
     assertEquals(expectedToString, expression.toString());
   }

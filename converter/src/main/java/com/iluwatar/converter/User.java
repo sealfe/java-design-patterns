@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,64 +24,7 @@
  */
 package com.iluwatar.converter;
 
-import java.util.Objects;
-
 /**
- * User class
+ * User record.
  */
-public class User {
-  private String firstName;
-  private String lastName;
-  private boolean isActive;
-  private String userId;
-
-  /**
-   * @param firstName user's first name
-   * @param lastName  user's last name
-   * @param isActive  flag indicating whether the user is active
-   * @param userId user's identificator
-   */
-  public User(String firstName, String lastName, boolean isActive, String userId) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.isActive = isActive;
-    this.userId = userId;
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public boolean isActive() {
-    return isActive;
-  }
-
-  public String getUserId() {
-    return userId;
-  }
-
-  @Override public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    User user = (User) o;
-    return isActive == user.isActive && Objects.equals(firstName, user.firstName) && Objects
-      .equals(lastName, user.lastName) && Objects.equals(userId, user.userId);
-  }
-
-  @Override public int hashCode() {
-    return Objects.hash(firstName, lastName, isActive, userId);
-  }
-
-  @Override public String toString() {
-    return "User{" + "firstName='" + firstName + '\'' + ", lastName='" + lastName + '\''
-      + ", isActive=" + isActive + ", userId='" + userId + '\'' + '}';
-  }
-}
+public record User(String firstName, String lastName, boolean active, String userId) {}

@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +24,19 @@
  */
 package com.iluwatar.front.controller;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertSame;
 
+import org.junit.jupiter.api.Test;
+
 /**
- * Date: 12/13/15 - 1:35 PM
+ * ApplicationExceptionTest
  *
- * @author Jeroen Meulemeester
  */
-public class ApplicationExceptionTest {
+class ApplicationExceptionTest {
 
   @Test
-  public void testCause() {
-    final Exception cause = new Exception();
+  void testCause() {
+    final var cause = new Exception();
     assertSame(cause, new ApplicationException(cause).getCause());
   }
 

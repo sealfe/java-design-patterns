@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,12 +25,13 @@
 package com.iluwatar.leaderelection;
 
 /**
- *  MessageManager interface
+ * MessageManager interface.
  */
 public interface MessageManager {
 
   /**
    * Send heartbeat message to leader instance to check whether the leader instance is alive.
+   *
    * @param leaderId Instance ID of leader instance.
    * @return {@code true} if leader instance is alive, or {@code false} if not.
    */
@@ -36,22 +39,25 @@ public interface MessageManager {
 
   /**
    * Send election message to other instances.
+   *
    * @param currentId Instance ID of which sends this message.
-   * @param content Election message content.
+   * @param content   Election message content.
    * @return {@code true} if the message is accepted by the target instances.
    */
   boolean sendElectionMessage(int currentId, String content);
 
   /**
    * Send new leader notification message to other instances.
+   *
    * @param currentId Instance ID of which sends this message.
-   * @param leaderId Leader message content.
+   * @param leaderId  Leader message content.
    * @return {@code true} if the message is accepted by the target instances.
    */
   boolean sendLeaderMessage(int currentId, int leaderId);
 
   /**
    * Send heartbeat invoke message. This will invoke heartbeat task in the target instance.
+   *
    * @param currentId Instance ID of which sends this message.
    */
   void sendHeartbeatInvokeMessage(int currentId);

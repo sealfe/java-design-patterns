@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +24,16 @@
  */
 package com.iluwatar.tolerantreader;
 
+import java.io.Serial;
+import lombok.Getter;
+
 /**
- * 
- * RainbowFishV2 is the evolved schema
- *
+ * RainbowFishV2 is the evolved schema.
  */
+@Getter
 public class RainbowFishV2 extends RainbowFish {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   private boolean sleeping;
@@ -40,25 +45,14 @@ public class RainbowFishV2 extends RainbowFish {
   }
 
   /**
-   * Constructor
+   * Constructor.
    */
   public RainbowFishV2(String name, int age, int lengthMeters, int weightTons, boolean sleeping,
-      boolean hungry, boolean angry) {
+                       boolean hungry, boolean angry) {
     this(name, age, lengthMeters, weightTons);
     this.sleeping = sleeping;
     this.hungry = hungry;
     this.angry = angry;
   }
 
-  public boolean getSleeping() {
-    return sleeping;
-  }
-
-  public boolean getHungry() {
-    return hungry;
-  }
-
-  public boolean getAngry() {
-    return angry;
-  }
 }

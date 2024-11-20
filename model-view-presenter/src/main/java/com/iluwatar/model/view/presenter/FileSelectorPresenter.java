@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +24,27 @@
  */
 package com.iluwatar.model.view.presenter;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
  * Every instance of this class represents the Presenter component in the Model-View-Presenter
  * architectural pattern.
- * <p>
- * It is responsible for reacting to the user's actions and update the View component.
+ *
+ * <p>It is responsible for reacting to the user's actions and update the View component.
  */
 public class FileSelectorPresenter implements Serializable {
 
   /**
-   * Generated serial version UID
+   * Generated serial version UID.
    */
+  @Serial
   private static final long serialVersionUID = 1210314339075855074L;
 
   /**
    * The View component that the presenter interacts with.
    */
-  private FileSelectorView view;
+  private final FileSelectorView view;
 
   /**
    * The Model component that the presenter interacts with.
@@ -48,8 +52,8 @@ public class FileSelectorPresenter implements Serializable {
   private FileLoader loader;
 
   /**
-   * Constructor
-   * 
+   * Constructor.
+   *
    * @param view The view component that the presenter will interact with.
    */
   public FileSelectorPresenter(FileSelectorView view) {
@@ -58,7 +62,7 @@ public class FileSelectorPresenter implements Serializable {
 
   /**
    * Sets the {@link FileLoader} object, to the value given as parameter.
-   * 
+   *
    * @param loader The new {@link FileLoader} object(the Model component).
    */
   public void setLoader(FileLoader loader) {
@@ -81,16 +85,16 @@ public class FileSelectorPresenter implements Serializable {
   }
 
   /**
-   * Ok button handler
+   * Ok button handler.
    */
   public void confirmed() {
-    if (loader.getFileName() == null || loader.getFileName().equals("")) {
+    if (loader.getFileName() == null || loader.getFileName().isEmpty()) {
       view.showMessage("Please give the name of the file first!");
       return;
     }
 
     if (loader.fileExists()) {
-      String data = loader.loadData();
+      var data = loader.loadData();
       view.displayData(data);
     } else {
       view.showMessage("The file specified does not exist.");

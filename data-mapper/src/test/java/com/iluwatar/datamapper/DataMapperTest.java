@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +24,10 @@
  */
 package com.iluwatar.datamapper;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * The Data Mapper (DM) is a layer of software that separates the in-memory objects from the
@@ -36,20 +38,20 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  * Data Mapper itself is even unknown to the domain layer.
  * <p>
  */
-public class DataMapperTest {
+class DataMapperTest {
 
   /**
    * This test verify that first data mapper is able to perform all CRUD operations on Student
    */
   @Test
-  public void testFirstDataMapper() {
+  void testFirstDataMapper() {
 
     /* Create new data mapper of first type */
-    final StudentDataMapper mapper = new StudentDataMapperImpl();
+    final var mapper = new StudentDataMapperImpl();
 
     /* Create new student */
-    int studentId = 1;
-    Student student = new Student(studentId, "Adam", 'A');
+    var studentId = 1;
+    var student = new Student(studentId, "Adam", 'A');
 
     /* Add student in respectibe db */
     mapper.insert(student);
@@ -58,7 +60,7 @@ public class DataMapperTest {
     assertEquals(studentId, mapper.find(student.getStudentId()).get().getStudentId());
 
     /* Update existing student object */
-    String updatedName = "AdamUpdated";
+    var updatedName = "AdamUpdated";
     student = new Student(student.getStudentId(), updatedName, 'A');
 
     /* Update student in respectibe db */

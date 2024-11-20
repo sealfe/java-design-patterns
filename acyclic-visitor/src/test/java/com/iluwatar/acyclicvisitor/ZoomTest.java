@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,37 +25,32 @@
 package com.iluwatar.acyclicvisitor;
 
 
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.mock;
-
 import org.junit.jupiter.api.Test;
 
-import com.iluwatar.acyclicvisitor.ConfigureForDosVisitor;
-import com.iluwatar.acyclicvisitor.ConfigureForUnixVisitor;
-import com.iluwatar.acyclicvisitor.Zoom;
-import com.iluwatar.acyclicvisitor.ZoomVisitor;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * Zoom test class
  */
-public class ZoomTest {
-  
+class ZoomTest {
+
   @Test
-  public void testAcceptForDos() {  
-    Zoom zoom = new Zoom();
-    ConfigureForDosVisitor mockVisitor = mock(ConfigureForDosVisitor.class);
-    
+  void testAcceptForDos() {
+    var zoom = new Zoom();
+    var mockVisitor = mock(ConfigureForDosVisitor.class);
+
     zoom.accept(mockVisitor);
-    verify((ZoomVisitor)mockVisitor).visit(eq(zoom));
+    verify((ZoomVisitor) mockVisitor).visit(eq(zoom));
   }
-  
+
   @Test
-  public void testAcceptForUnix() {
-    Zoom zoom = new Zoom();
-    ConfigureForUnixVisitor mockVisitor = mock(ConfigureForUnixVisitor.class);
-    
+  void testAcceptForUnix() {
+    var zoom = new Zoom();
+    var mockVisitor = mock(ConfigureForUnixVisitor.class);
+
     zoom.accept(mockVisitor);
-    verify((ZoomVisitor)mockVisitor).visit(eq(zoom));
+    verify((ZoomVisitor) mockVisitor).visit(eq(zoom));
   }
 }

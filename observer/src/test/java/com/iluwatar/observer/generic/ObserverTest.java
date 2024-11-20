@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,10 +38,8 @@ import java.util.function.Supplier;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Date: 12/27/15 - 11:44 AM
  * Test for Observers
  * @param <O> Type of Observer
- * @author Jeroen Meulemeester
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class ObserverTest<O extends Observer<?, ?, WeatherType>> {
@@ -47,12 +47,12 @@ public abstract class ObserverTest<O extends Observer<?, ?, WeatherType>> {
   private InMemoryAppender appender;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     appender = new InMemoryAppender();
   }
 
   @AfterEach
-  public void tearDown() {
+  void tearDown() {
     appender.stop();
   }
 
@@ -77,8 +77,8 @@ public abstract class ObserverTest<O extends Observer<?, ?, WeatherType>> {
    */
   @ParameterizedTest
   @MethodSource("dataProvider")
-  public void testObserver(WeatherType weather, String response) {
-    final O observer = this.factory.get();
+  void testObserver(WeatherType weather, String response) {
+    final var observer = this.factory.get();
     assertEquals(0, appender.getLogSize());
 
     observer.update(null, weather);

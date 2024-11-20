@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,39 +24,32 @@
  */
 package com.iluwatar.acyclicvisitor;
 
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-
 import org.junit.jupiter.api.Test;
 
-import com.iluwatar.acyclicvisitor.ConfigureForDosVisitor;
-import com.iluwatar.acyclicvisitor.ConfigureForUnixVisitor;
-import com.iluwatar.acyclicvisitor.Hayes;
-import com.iluwatar.acyclicvisitor.HayesVisitor;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 /**
  * Hayes test class
  */
-public class HayesTest {
+class HayesTest {
 
   @Test
-  public void testAcceptForDos() {  
-    Hayes hayes = new Hayes();
-    ConfigureForDosVisitor mockVisitor = mock(ConfigureForDosVisitor.class);
-    
+  void testAcceptForDos() {
+    var hayes = new Hayes();
+    var mockVisitor = mock(ConfigureForDosVisitor.class);
+
     hayes.accept(mockVisitor);
-    verify((HayesVisitor)mockVisitor).visit(eq(hayes));
+    verify((HayesVisitor) mockVisitor).visit(eq(hayes));
   }
-  
+
   @Test
-  public void testAcceptForUnix() {    
-    Hayes hayes = new Hayes();
-    ConfigureForUnixVisitor mockVisitor = mock(ConfigureForUnixVisitor.class);
-    
+  void testAcceptForUnix() {
+    var hayes = new Hayes();
+    var mockVisitor = mock(ConfigureForUnixVisitor.class);
+
     hayes.accept(mockVisitor);
-    
-    verifyZeroInteractions(mockVisitor);
+
+    verifyNoMoreInteractions(mockVisitor);
   }
 }

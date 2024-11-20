@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,66 +24,7 @@
  */
 package com.iluwatar.converter;
 
-
-import java.util.Objects;
-
 /**
- * User DTO class
+ * UserDto record.
  */
-public class UserDto {
-
-  private String firstName;
-  private String lastName;
-  private boolean isActive;
-  private String email;
-
-  /**
-   * @param firstName user's first name
-   * @param lastName  user's last name
-   * @param isActive  flag indicating whether the user is active
-   * @param email     user's email address
-   */
-  public UserDto(String firstName, String lastName, boolean isActive, String email) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.isActive = isActive;
-    this.email = email;
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public boolean isActive() {
-    return isActive;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  @Override public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    UserDto userDto = (UserDto) o;
-    return isActive == userDto.isActive && Objects.equals(firstName, userDto.firstName) && Objects
-      .equals(lastName, userDto.lastName) && Objects.equals(email, userDto.email);
-  }
-
-  @Override public int hashCode() {
-    return Objects.hash(firstName, lastName, isActive, email);
-  }
-
-  @Override public String toString() {
-    return "UserDto{" + "firstName='" + firstName + '\'' + ", lastName='" + lastName + '\''
-      + ", isActive=" + isActive + ", email='" + email + '\'' + '}';
-  }
-}
+public record UserDto(String firstName, String lastName, boolean active, String email) {}

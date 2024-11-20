@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +24,17 @@
  */
 package com.iluwatar.lazy.loading;
 
-import java.lang.reflect.Field;
-
 /**
- * Date: 12/19/15 - 12:05 PM
+ * HolderNaiveTest
  *
- * @author Jeroen Meulemeester
  */
-public class HolderNaiveTest extends AbstractHolderTest {
+class HolderNaiveTest extends AbstractHolderTest {
 
   private final HolderNaive holder = new HolderNaive();
 
   @Override
   Heavy getInternalHeavyValue() throws Exception {
-    final Field holderField = HolderNaive.class.getDeclaredField("heavy");
+    final var holderField = HolderNaive.class.getDeclaredField("heavy");
     holderField.setAccessible(true);
     return (Heavy) holderField.get(this.holder);
   }

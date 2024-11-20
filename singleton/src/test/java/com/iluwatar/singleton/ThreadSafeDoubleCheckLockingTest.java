@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,34 +24,33 @@
  */
 package com.iluwatar.singleton;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import org.junit.jupiter.api.Test;
 
 /**
- * Date: 12/29/15 - 19:26 PM
+ * ThreadSafeDoubleCheckLockingTest
  *
- * @author Jeroen Meulemeester
  */
-public class ThreadSafeDoubleCheckLockingTest extends SingletonTest<ThreadSafeDoubleCheckLocking> {
+class ThreadSafeDoubleCheckLockingTest extends SingletonTest<ThreadSafeDoubleCheckLocking> {
 
   /**
-   * Create a new singleton test instance using the given 'getInstance' method
+   * Create a new singleton test instance using the given 'getInstance' method.
    */
   public ThreadSafeDoubleCheckLockingTest() {
     super(ThreadSafeDoubleCheckLocking::getInstance);
   }
 
   /**
-   * Test creating new instance by refection
+   * Test creating new instance by refection.
    */
-  @Test(expected = InvocationTargetException.class)
-  public void testCreatingNewInstanceByRefection() throws Exception {
-    ThreadSafeDoubleCheckLocking instance1 = ThreadSafeDoubleCheckLocking.getInstance();
-    Constructor constructor = ThreadSafeDoubleCheckLocking.class.getDeclaredConstructor();
+  @Test
+  void testCreatingNewInstanceByRefection() throws Exception {
+    ThreadSafeDoubleCheckLocking.getInstance();
+    var constructor = ThreadSafeDoubleCheckLocking.class.getDeclaredConstructor();
     constructor.setAccessible(true);
-    ThreadSafeDoubleCheckLocking instance2 = (ThreadSafeDoubleCheckLocking) constructor.newInstance(null);
+    assertThrows(InvocationTargetException.class, () -> constructor.newInstance((Object[]) null));
   }
 
 }

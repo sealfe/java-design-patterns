@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +25,9 @@
 package com.iluwatar.pipeline;
 
 /**
- * Forms a contract to all stage handlers to accept a certain type of input and return a processed output.
+ * Forms a contract to all stage handlers to accept a certain type of input and return a processed
+ * output.
+ *
  * @param <I> the input type of the handler
  * @param <O> the processed output type of the handler
  */

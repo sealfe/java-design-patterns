@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,48 +24,79 @@
  */
 package com.iluwatar.abstractdocument;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- * Abstract implementation of Document interface
+ * Abstract implementation of Document interface.
  */
 public abstract class AbstractDocument implements Document {
 
-  private final Map<String, Object> properties;
+  private final Map<String, Object> documentProperties;
 
   protected AbstractDocument(Map<String, Object> properties) {
     Objects.requireNonNull(properties, "properties map is required");
-    this.properties = properties;
+    this.documentProperties = properties;
   }
 
   @Override
   public Void put(String key, Object value) {
-    properties.put(key, value);
+    documentProperties.put(key, value);
     return null;
   }
 
   @Override
   public Object get(String key) {
-    return properties.get(key);
+    return documentProperties.get(key);
   }
 
   @Override
-  public <T> Stream<T> children(String key, Function<Map<String, Object>, T> constructor) {
-    Optional<List<Map<String, Object>>> any = Stream.of(get(key)).filter(Objects::nonNull)
-        .map(el -> (List<Map<String, Object>>) el).findAny();
-    return any.map(maps -> maps.stream().map(constructor)).orElseGet(Stream::empty);
+  public <T> Stream<T> children(String key, Function<Map<String, Object>, T> childConstructor) {
+    return Stream.ofNullable(get(key))
+            .filter(Objects::nonNull)
+            .map(el -> (List<Map<String, Object>>) el)
+            .findAny()
+            .stream()
+            .flatMap(Collection::stream)
+            .map(childConstructor);
   }
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
+    return buildStringRepresentation();
+  }
+
+  private String buildStringRepresentation() {
+    var builder = new StringBuilder();
     builder.append(getClass().getName()).append("[");
-    properties.forEach((key, value) -> builder.append("[").append(key).append(" : ").append(value).append("]"));
+
+    // Explaining variable for document properties map
+    Map<String, Object> documentProperties = this.documentProperties;
+
+    // Explaining variable for the size of document properties map
+    int numProperties = documentProperties.size();
+
+    // Explaining variable for tracking the current property index
+    int currentPropertyIndex = 0;
+
+    // Iterate over document properties map
+    for (Map.Entry<String, Object> entry : documentProperties.entrySet()) {
+      String key = entry.getKey();
+      Object value = entry.getValue();
+
+      // Append key-value pair
+      builder.append("[").append(key).append(" : ").append(value).append("]");
+
+      // Add comma if not last property
+      if (++currentPropertyIndex < numProperties) {
+        builder.append(", ");
+      }
+    }
+
     builder.append("]");
     return builder.toString();
   }

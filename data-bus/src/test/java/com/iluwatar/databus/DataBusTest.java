@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +24,19 @@
  */
 package com.iluwatar.databus;
 
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.never;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.never;
-
 /**
  * Tests for {@link DataBus}.
  *
- * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public class DataBusTest {
+class DataBusTest {
 
   @Mock
   private Member member;
@@ -44,14 +45,14 @@ public class DataBusTest {
   private DataType event;
 
   @BeforeEach
-  public void setUp() {
-    MockitoAnnotations.initMocks(this);
+  void setUp() {
+    MockitoAnnotations.openMocks(this);
   }
 
   @Test
-  public void publishedEventIsReceivedBySubscribedMember() {
+  void publishedEventIsReceivedBySubscribedMember() {
     //given
-    final DataBus dataBus = DataBus.getInstance();
+    final var dataBus = DataBus.getInstance();
     dataBus.subscribe(member);
     //when
     dataBus.publish(event);
@@ -60,9 +61,9 @@ public class DataBusTest {
   }
 
   @Test
-  public void publishedEventIsNotReceivedByMemberAfterUnsubscribing() {
+  void publishedEventIsNotReceivedByMemberAfterUnsubscribing() {
     //given
-    final DataBus dataBus = DataBus.getInstance();
+    final var dataBus = DataBus.getInstance();
     dataBus.subscribe(member);
     dataBus.unsubscribe(member);
     //when

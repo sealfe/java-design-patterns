@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,18 +24,39 @@
  */
 package concreteextensions;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
 import org.junit.jupiter.api.Test;
+import org.slf4j.LoggerFactory;
 import units.CommanderUnit;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Created by Srdjan on 03-May-17.
+ * CommanderTest
  */
-public class CommanderTest {
+class CommanderTest {
+
   @Test
-  public void commanderReady() {
-    final Commander commander = new Commander(new CommanderUnit("CommanderUnitTest"));
+  void shouldExecuteCommanderReady() {
 
+    Logger commanderLogger = (Logger) LoggerFactory.getLogger(Commander.class);
+
+    ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
+    listAppender.start();
+
+    commanderLogger.addAppender(listAppender);
+
+    final var commander = new Commander(new CommanderUnit("CommanderUnitTest"));
     commander.commanderReady();
-  }
 
+    List<ILoggingEvent> logsList = listAppender.list;
+    assertEquals("[Commander] " + commander.unit().getName() + " is ready!", logsList.get(0)
+        .getMessage());
+    assertEquals(Level.INFO, logsList.get(0)
+        .getLevel());
+  }
 }

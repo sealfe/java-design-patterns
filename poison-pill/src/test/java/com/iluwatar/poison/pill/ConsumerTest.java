@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,50 +24,48 @@
  */
 package com.iluwatar.poison.pill;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
+import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDateTime;
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 /**
- * Date: 12/27/15 - 9:45 PM
+ * ConsumerTest
  *
- * @author Jeroen Meulemeester
  */
-public class ConsumerTest {
+class ConsumerTest {
 
   private InMemoryAppender appender;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     appender = new InMemoryAppender(Consumer.class);
   }
 
   @AfterEach
-  public void tearDown() {
+  void tearDown() {
     appender.stop();
   }
 
   @Test
-  public void testConsume() throws Exception {
-    final Message[] messages = new Message[]{
+  void testConsume() throws Exception {
+    final var messages = List.of(
         createMessage("you", "Hello!"),
         createMessage("me", "Hi!"),
         Message.POISON_PILL,
-        createMessage("late_for_the_party", "Hello? Anyone here?"),
-    };
+        createMessage("late_for_the_party", "Hello? Anyone here?")
+    );
 
-    final MessageQueue queue = new SimpleMessageQueue(messages.length);
-    for (final Message message : messages) {
+    final var queue = new SimpleMessageQueue(messages.size());
+    for (final var message : messages) {
       queue.put(message);
     }
 
@@ -84,15 +84,15 @@ public class ConsumerTest {
    * @return The message instance
    */
   private static Message createMessage(final String sender, final String message) {
-    final SimpleMessage msg = new SimpleMessage();
+    final var msg = new SimpleMessage();
     msg.addHeader(Message.Headers.SENDER, sender);
     msg.addHeader(Message.Headers.DATE, LocalDateTime.now().toString());
     msg.setBody(message);
     return msg;
   }
 
-  private class InMemoryAppender extends AppenderBase<ILoggingEvent> {
-    private List<ILoggingEvent> log = new LinkedList<>();
+  private static class InMemoryAppender extends AppenderBase<ILoggingEvent> {
+    private final List<ILoggingEvent> log = new LinkedList<>();
 
     public InMemoryAppender(Class clazz) {
       ((Logger) LoggerFactory.getLogger(clazz)).addAppender(this);
@@ -105,7 +105,7 @@ public class ConsumerTest {
     }
 
     public boolean logContains(String message) {
-      return log.stream().anyMatch(event -> event.getFormattedMessage().equals(message));
+      return log.stream().map(ILoggingEvent::getFormattedMessage).anyMatch(message::equals);
     }
   }
 

@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,50 +24,43 @@
  */
 package com.iluwatar.retry;
 
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.Test;
+
 /**
  * Unit tests for {@link FindCustomer}.
  *
- * @author George Aristy (george.aristy@gmail.com)
  */
-public class FindCustomerTest {
+class FindCustomerTest {
   /**
    * Returns the given result with no exceptions.
    */
   @Test
-  public void noExceptions() throws Exception {
-    assertThat(
-        new FindCustomer("123").perform(),
-        is("123")
-    );
+  void noExceptions() throws Exception {
+    assertThat(new FindCustomer("123").perform(), is("123"));
   }
 
   /**
    * Throws the given exception.
-   * 
-   * @throws Exception the expected exception
    */
   @Test
-  public void oneException() {
-    assertThrows(BusinessException.class, () -> {
-      new FindCustomer("123", new BusinessException("test")).perform();
-    });
+  void oneException() {
+    var findCustomer = new FindCustomer("123", new BusinessException("test"));
+    assertThrows(BusinessException.class, findCustomer::perform);
   }
 
   /**
    * Should first throw the given exceptions, then return the given result.
-   * 
+   *
    * @throws Exception not an expected exception
    */
   @Test
-  public void resultAfterExceptions() throws Exception {
-    final BusinessOperation<String> op = new FindCustomer(
-        "123", 
+  void resultAfterExceptions() throws Exception {
+    final var op = new FindCustomer(
+        "123",
         new CustomerNotFoundException("not found"),
         new DatabaseNotAvailableException("not available")
     );
@@ -80,9 +75,6 @@ public class FindCustomerTest {
       //ignore
     }
 
-    assertThat(
-        op.perform(),
-        is("123")
-    );
+    assertThat(op.perform(), is("123"));
   }
 }

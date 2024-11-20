@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,47 +26,42 @@ package com.iluwatar.data.locality.game.component.manager;
 
 import com.iluwatar.data.locality.game.component.Component;
 import com.iluwatar.data.locality.game.component.PhysicsComponent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.stream.IntStream;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Physics component Manager for Game.
  */
+@Slf4j
 public class PhysicsComponentManager {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(PhysicsComponentManager.class);
 
   private static final int MAX_ENTITIES = 10000;
 
   private final int numEntities;
 
-  private static final Component[] PHYSICS_COMPONENTS = new PhysicsComponent[MAX_ENTITIES];
+  private final Component[] physicsComponents = new PhysicsComponent[MAX_ENTITIES];
 
   public PhysicsComponentManager(int numEntities) {
     this.numEntities = numEntities;
   }
 
   /**
-   * Start physics component of Game
+   * Start physics component of Game.
    */
   public void start() {
     LOGGER.info("Start Physics Game Component ");
-    for (int i = 0; i < numEntities; i++) {
-      PHYSICS_COMPONENTS[i] = new PhysicsComponent();
-    }
+    IntStream.range(0, numEntities).forEach(i -> physicsComponents[i] = new PhysicsComponent());
   }
 
 
   /**
-   * Update physics component of Game
+   * Update physics component of Game.
    */
   public void update() {
     LOGGER.info("Update Physics Game Component ");
     // Process physics.
-    for (int i = 0; i < numEntities; i++) {
-      if (PHYSICS_COMPONENTS.length > i && PHYSICS_COMPONENTS[i] != null) {
-        PHYSICS_COMPONENTS[i].update();
-      }
-    }
+    IntStream.range(0, numEntities)
+        .filter(i -> physicsComponents.length > i && physicsComponents[i] != null)
+        .forEach(i -> physicsComponents[i].update());
   }
 }

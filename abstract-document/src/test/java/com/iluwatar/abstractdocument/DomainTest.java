@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +24,19 @@
  */
 package com.iluwatar.abstractdocument;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.junit.jupiter.api.Test;
-
 import com.iluwatar.abstractdocument.domain.Car;
 import com.iluwatar.abstractdocument.domain.Part;
 import com.iluwatar.abstractdocument.domain.enums.Property;
+import org.junit.jupiter.api.Test;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test for Part and Car
  */
-public class DomainTest {
+class DomainTest {
 
   private static final String TEST_PART_TYPE = "test-part-type";
   private static final String TEST_PART_MODEL = "test-part-model";
@@ -47,28 +46,28 @@ public class DomainTest {
   private static final long TEST_CAR_PRICE = 1L;
 
   @Test
-  public void shouldConstructPart() {
-    Map<String, Object> partProperties = new HashMap<>();
-    partProperties.put(Property.TYPE.toString(), TEST_PART_TYPE);
-    partProperties.put(Property.MODEL.toString(), TEST_PART_MODEL);
-    partProperties.put(Property.PRICE.toString(), TEST_PART_PRICE);
-    Part part = new Part(partProperties);
-
-    assertEquals(TEST_PART_TYPE, part.getType().get());
-    assertEquals(TEST_PART_MODEL, part.getModel().get());
-    assertEquals(TEST_PART_PRICE, part.getPrice().get());
+  void shouldConstructPart() {
+    var partProperties = Map.of(
+        Property.TYPE.toString(), TEST_PART_TYPE,
+        Property.MODEL.toString(), TEST_PART_MODEL,
+        Property.PRICE.toString(), (Object) TEST_PART_PRICE
+    );
+    var part = new Part(partProperties);
+    assertEquals(TEST_PART_TYPE, part.getType().orElseThrow());
+    assertEquals(TEST_PART_MODEL, part.getModel().orElseThrow());
+    assertEquals(TEST_PART_PRICE, part.getPrice().orElseThrow());
   }
 
   @Test
-  public void shouldConstructCar() {
-    Map<String, Object> carProperties = new HashMap<>();
-    carProperties.put(Property.MODEL.toString(), TEST_CAR_MODEL);
-    carProperties.put(Property.PRICE.toString(), TEST_CAR_PRICE);
-    carProperties.put(Property.PARTS.toString(), Arrays.asList(new HashMap<>(), new HashMap<>()));
-    Car car = new Car(carProperties);
-
-    assertEquals(TEST_CAR_MODEL, car.getModel().get());
-    assertEquals(TEST_CAR_PRICE, car.getPrice().get());
+  void shouldConstructCar() {
+    var carProperties = Map.of(
+        Property.MODEL.toString(), TEST_CAR_MODEL,
+        Property.PRICE.toString(), TEST_CAR_PRICE,
+        Property.PARTS.toString(), List.of(Map.of(), Map.of())
+    );
+    var car = new Car(carProperties);
+    assertEquals(TEST_CAR_MODEL, car.getModel().orElseThrow());
+    assertEquals(TEST_CAR_PRICE, car.getPrice().orElseThrow());
     assertEquals(2, car.getParts().count());
   }
 

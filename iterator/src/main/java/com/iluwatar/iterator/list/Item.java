@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,31 +24,23 @@
  */
 package com.iluwatar.iterator.list;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
- * 
- * Item
- *
+ * Item.
  */
+@AllArgsConstructor
 public class Item {
 
+  @Getter
+  @Setter
   private ItemType type;
-  private String name;
-
-  public Item(ItemType type, String name) {
-    this.setType(type);
-    this.name = name;
-  }
+  private final String name;
 
   @Override
   public String toString() {
     return name;
-  }
-
-  public ItemType getType() {
-    return type;
-  }
-
-  public final void setType(ItemType type) {
-    this.type = type;
   }
 }

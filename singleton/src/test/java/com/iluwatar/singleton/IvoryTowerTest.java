@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +25,13 @@
 package com.iluwatar.singleton;
 
 /**
- * Date: 12/29/15 - 19:23 PM
+ * IvoryTowerTest
  *
- * @author Jeroen Meulemeester
  */
-public class IvoryTowerTest extends SingletonTest<IvoryTower> {
+class IvoryTowerTest extends SingletonTest<IvoryTower> {
 
   /**
-   * Create a new singleton test instance using the given 'getInstance' method
+   * Create a new singleton test instance using the given 'getInstance' method.
    */
   public IvoryTowerTest() {
     super(IvoryTower::getInstance);

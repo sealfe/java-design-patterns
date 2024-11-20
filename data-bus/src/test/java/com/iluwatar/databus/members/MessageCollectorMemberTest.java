@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,28 +24,26 @@
  */
 package com.iluwatar.databus.members;
 
-import com.iluwatar.databus.data.MessageData;
-import com.iluwatar.databus.data.StartingData;
-import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import com.iluwatar.databus.data.MessageData;
+import com.iluwatar.databus.data.StartingData;
+import java.time.LocalDateTime;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link MessageCollectorMember}.
  *
- * @author Paul Campbell (pcampbell@kemitix.net)
  */
-public class MessageCollectorMemberTest {
+class MessageCollectorMemberTest {
 
   @Test
-  public void collectMessageFromMessageData() {
+  void collectMessageFromMessageData() {
     //given
-    final String message = "message";
-    final MessageData messageData = new MessageData(message);
-    final MessageCollectorMember collector = new MessageCollectorMember("collector");
+    final var message = "message";
+    final var messageData = new MessageData(message);
+    final var collector = new MessageCollectorMember("collector");
     //when
     collector.accept(messageData);
     //then
@@ -51,10 +51,10 @@ public class MessageCollectorMemberTest {
   }
 
   @Test
-  public void collectIgnoresMessageFromOtherDataTypes() {
+  void collectIgnoresMessageFromOtherDataTypes() {
     //given
-    final StartingData startingData = new StartingData(LocalDateTime.now());
-    final MessageCollectorMember collector = new MessageCollectorMember("collector");
+    final var startingData = new StartingData(LocalDateTime.now());
+    final var collector = new MessageCollectorMember("collector");
     //when
     collector.accept(startingData);
     //then

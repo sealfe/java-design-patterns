@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +24,13 @@
  */
 package com.iluwatar.flux.view;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import com.iluwatar.flux.action.Action;
 import com.iluwatar.flux.action.MenuItem;
 import com.iluwatar.flux.dispatcher.Dispatcher;
@@ -29,26 +38,18 @@ import com.iluwatar.flux.store.MenuStore;
 import com.iluwatar.flux.store.Store;
 import org.junit.jupiter.api.Test;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
 /**
- * Date: 12/12/15 - 10:31 PM
+ * MenuViewTest
  *
- * @author Jeroen Meulemeester
  */
-public class MenuViewTest {
+class MenuViewTest {
 
   @Test
-  public void testStoreChanged() throws Exception {
-    final MenuStore store = mock(MenuStore.class);
+  void testStoreChanged() {
+    final var store = mock(MenuStore.class);
     when(store.getSelected()).thenReturn(MenuItem.HOME);
 
-    final MenuView view = new MenuView();
+    final var view = new MenuView();
     view.storeChanged(store);
 
     verify(store, times(1)).getSelected();
@@ -56,11 +57,11 @@ public class MenuViewTest {
   }
 
   @Test
-  public void testItemClicked() throws Exception {
-    final Store store = mock(Store.class);
+  void testItemClicked() {
+    final var store = mock(Store.class);
     Dispatcher.getInstance().registerStore(store);
 
-    final MenuView view = new MenuView();
+    final var view = new MenuView();
     view.itemClicked(MenuItem.PRODUCTS);
 
     // We should receive a menu click action and a content changed action

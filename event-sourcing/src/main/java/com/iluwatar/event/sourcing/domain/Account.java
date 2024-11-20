@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,74 +29,30 @@ import com.iluwatar.event.sourcing.event.MoneyDepositEvent;
 import com.iluwatar.event.sourcing.event.MoneyTransferEvent;
 import com.iluwatar.event.sourcing.state.AccountAggregate;
 import java.math.BigDecimal;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * This is the Account class that holds the account info, the account number,
- * account owner name and money of the account. Account class also have the business logic of events
- * that effects this account.
+ * This is the Account class that holds the account info, the account number, account owner name and
+ * money of the account. Account class also have the business logic of events that effects this
+ * account.
  *
- * Created by Serdar Hamzaogullari on 06.08.2017.
+ * <p>Created by Serdar Hamzaogullari on 06.08.2017.
  */
+@Setter
+@Getter
+@RequiredArgsConstructor
+@Slf4j
 public class Account {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(Account.class);
 
   private final int accountNo;
   private final String owner;
-  private BigDecimal money;
-  
-  private static final String MSG = "Some external api for only realtime execution could be called here.";
+  private BigDecimal money = BigDecimal.ZERO;
 
-  /**
-   * Instantiates a new Account.
-   *
-   * @param accountNo the account no
-   * @param owner the owner
-   */
-  public Account(int accountNo, String owner) {
-    this.accountNo = accountNo;
-    this.owner = owner;
-    money = BigDecimal.ZERO;
-  }
-
-  /**
-   * Gets account no.
-   *
-   * @return the account no
-   */
-  public int getAccountNo() {
-    return accountNo;
-  }
-
-  /**
-   * Gets owner.
-   *
-   * @return the owner
-   */
-  public String getOwner() {
-    return owner;
-  }
-
-  /**
-   * Gets money.
-   *
-   * @return the money
-   */
-  public BigDecimal getMoney() {
-    return money;
-  }
-
-  /**
-   * Sets money.
-   *
-   * @param money the money
-   */
-  public void setMoney(BigDecimal money) {
-    this.money = money;
-  }
-
+  private static final String MSG =
+      "Some external api for only realtime execution could be called here.";
 
   /**
    * Copy account.
@@ -102,7 +60,7 @@ public class Account {
    * @return the account
    */
   public Account copy() {
-    Account account = new Account(accountNo, owner);
+    var account = new Account(accountNo, owner);
     account.setMoney(money);
     return account;
   }
@@ -133,7 +91,7 @@ public class Account {
   }
 
   private void handleWithdrawal(BigDecimal money, boolean realTime) {
-    if (this.money.compareTo(money) == -1) {
+    if (this.money.compareTo(money) < 0) {
       throw new RuntimeException("Insufficient Account Balance");
     }
 
@@ -157,7 +115,7 @@ public class Account {
   /**
    * Handles the AccountCreateEvent.
    *
-   * @param accountCreateEvent the account create event
+   * @param accountCreateEvent the account created event
    */
   public void handleEvent(AccountCreateEvent accountCreateEvent) {
     AccountAggregate.putAccount(this);

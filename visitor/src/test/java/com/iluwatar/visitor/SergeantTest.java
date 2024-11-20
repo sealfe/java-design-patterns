@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,18 +24,17 @@
  */
 package com.iluwatar.visitor;
 
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
 /**
- * Date: 12/30/15 - 19:45 PM
+ * SergeantTest
  *
- * @author Jeroen Meulemeester
  */
-public class SergeantTest extends UnitTest<Sergeant> {
+class SergeantTest extends UnitTest<Sergeant> {
 
   /**
-   * Create a new test instance for the given {@link Sergeant}
+   * Create a new test instance for the given {@link Sergeant}.
    */
   public SergeantTest() {
     super(Sergeant::new);
@@ -41,7 +42,7 @@ public class SergeantTest extends UnitTest<Sergeant> {
 
   @Override
   void verifyVisit(Sergeant unit, UnitVisitor mockedVisitor) {
-    verify(mockedVisitor).visitSergeant(eq(unit));
+    verify(mockedVisitor).visit(eq(unit));
   }
 
 }

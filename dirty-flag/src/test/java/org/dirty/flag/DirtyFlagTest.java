@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,34 +24,27 @@
  */
 package org.dirty.flag;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.List;
-
+import com.iluwatar.dirtyflag.DataFetcher;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.iluwatar.dirtyflag.DataFetcher;
-
 /**
- *
  * Application test
- *
  */
-public class DirtyFlagTest {
+class DirtyFlagTest {
 
   @Test
-  public void testIsDirty() {
-    DataFetcher df = new DataFetcher();
-    List<String> countries = df.fetch();
-    assertFalse(countries.isEmpty());
+  void testIsDirty() {
+    var df = new DataFetcher();
+    var countries = df.fetch();
+    Assertions.assertFalse(countries.isEmpty());
   }
 
   @Test
-  public void testIsNotDirty() {
-    DataFetcher df = new DataFetcher();
+  void testIsNotDirty() {
+    var df = new DataFetcher();
     df.fetch();
-    List<String> countries = df.fetch();
-    assertTrue(countries.isEmpty());
+    var countries = df.fetch();
+    Assertions.assertTrue(countries.isEmpty());
   }
 }

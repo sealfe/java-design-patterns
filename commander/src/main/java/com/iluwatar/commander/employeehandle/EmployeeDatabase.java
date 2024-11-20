@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,29 +24,26 @@
  */
 package com.iluwatar.commander.employeehandle;
 
-import java.util.Hashtable;
 import com.iluwatar.commander.Database;
 import com.iluwatar.commander.Order;
 import com.iluwatar.commander.exceptions.DatabaseUnavailableException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Employee Database is where orders which have encountered some issue(s) are added.
  */
 
 public class EmployeeDatabase extends Database<Order> {
-  private Hashtable<String, Order> data;
-
-  public EmployeeDatabase() {
-    this.data = new Hashtable<String, Order>();
-  }
+  private final Map<String, Order> data = new HashMap<>();
 
   @Override
   public Order add(Order o) throws DatabaseUnavailableException {
-    return data.put(o.id,o);
+    return data.put(o.id, o);
   }
 
   @Override
-  public Order get(String oId) throws DatabaseUnavailableException {
-    return data.get(oId);
+  public Order get(String orderId) throws DatabaseUnavailableException {
+    return data.get(orderId);
   }
 }

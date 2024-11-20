@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +24,16 @@
  */
 package com.iluwatar.doubledispatch;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import org.junit.jupiter.api.Test;
+
 /**
- * Date: 12/10/15 - 11:31 PM
+ * SpaceStationMirTest
  *
- * @author Jeroen Meulemeester
  */
-public class SpaceStationMirTest extends CollisionTest<SpaceStationMir> {
+class SpaceStationMirTest extends CollisionTest<SpaceStationMir> {
 
   @Override
   final SpaceStationMir getTestedObject() {
@@ -43,8 +44,8 @@ public class SpaceStationMirTest extends CollisionTest<SpaceStationMir> {
    * Test the constructor parameters
    */
   @Test
-  public void testConstructor() {
-    final SpaceStationMir mir = new SpaceStationMir(1, 2, 3, 4);
+  void testConstructor() {
+    final var mir = new SpaceStationMir(1, 2, 3, 4);
     assertEquals(1, mir.getLeft());
     assertEquals(2, mir.getTop());
     assertEquals(3, mir.getRight());
@@ -58,12 +59,11 @@ public class SpaceStationMirTest extends CollisionTest<SpaceStationMir> {
    * Test what happens we collide with an asteroid
    */
   @Test
-  public void testCollideFlamingAsteroid() {
+  void testCollideFlamingAsteroid() {
     testCollision(
         new FlamingAsteroid(1, 1, 3, 4),
         false, true,
-        false, false,
-        "SpaceStationMir hits FlamingAsteroid."
+        false, false
     );
   }
 
@@ -71,12 +71,11 @@ public class SpaceStationMirTest extends CollisionTest<SpaceStationMir> {
    * Test what happens we collide with an meteoroid
    */
   @Test
-  public void testCollideMeteoroid() {
+  void testCollideMeteoroid() {
     testCollision(
         new Meteoroid(1, 1, 3, 4),
         false, false,
-        false, false,
-        "SpaceStationMir hits Meteoroid."
+        false, false
     );
   }
 
@@ -84,12 +83,11 @@ public class SpaceStationMirTest extends CollisionTest<SpaceStationMir> {
    * Test what happens we collide with ISS
    */
   @Test
-  public void testCollideSpaceStationIss() {
+  void testCollideSpaceStationIss() {
     testCollision(
         new SpaceStationIss(1, 1, 3, 4),
         true, false,
-        false, false,
-        "SpaceStationMir hits SpaceStationIss. SpaceStationIss is damaged!"
+        false, false
     );
   }
 
@@ -97,12 +95,11 @@ public class SpaceStationMirTest extends CollisionTest<SpaceStationMir> {
    * Test what happens we collide with MIR
    */
   @Test
-  public void testCollideSpaceStationMir() {
+  void testCollideSpaceStationMir() {
     testCollision(
         new SpaceStationMir(1, 1, 3, 4),
         true, false,
-        false, false,
-        "SpaceStationMir hits SpaceStationMir. SpaceStationMir is damaged!"
+        false, false
     );
   }
 

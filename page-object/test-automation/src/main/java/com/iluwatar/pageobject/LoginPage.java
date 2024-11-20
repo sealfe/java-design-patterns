@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,29 +24,26 @@
  */
 package com.iluwatar.pageobject;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.htmlunit.WebClient;
+import org.htmlunit.html.HtmlPage;
+import org.htmlunit.html.HtmlPasswordInput;
+import org.htmlunit.html.HtmlSubmitInput;
+import org.htmlunit.html.HtmlTextInput;
 
 /**
  * Page Object encapsulating the Login Page (login.html)
  */
+@Slf4j
 public class LoginPage extends Page {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(LoginPage.class);
   private static final String LOGIN_PAGE_HTML_FILE = "login.html";
   private static final String PAGE_URL = "file:" + AUT_PATH + LOGIN_PAGE_HTML_FILE;
 
   private HtmlPage page;
 
   /**
-   * Constructor
+   * Constructor.
    *
    * @param webClient {@link WebClient}
    */
@@ -53,7 +52,7 @@ public class LoginPage extends Page {
   }
 
   /**
-   * Navigates to the Login page
+   * Navigates to the Login page.
    *
    * @return {@link LoginPage}
    */
@@ -61,7 +60,7 @@ public class LoginPage extends Page {
     try {
       page = this.webClient.getPage(PAGE_URL);
     } catch (IOException e) {
-      LOGGER.error("An error occured on navigateToPage.", e);
+      LOGGER.error("An error occurred on navigateToPage.", e);
     }
     return this;
   }
@@ -76,43 +75,43 @@ public class LoginPage extends Page {
 
 
   /**
-   * Enters the username into the username input text field
+   * Enters the username into the username input text field.
    *
    * @param username the username to enter
    * @return {@link LoginPage}
    */
   public LoginPage enterUsername(String username) {
-    HtmlTextInput usernameInputTextField = (HtmlTextInput) page.getElementById("username");
+    var usernameInputTextField = (HtmlTextInput) page.getElementById("username");
     usernameInputTextField.setText(username);
     return this;
   }
 
 
   /**
-   * Enters the password into the password input password field
+   * Enters the password into the password input password field.
    *
    * @param password the password to enter
    * @return {@link LoginPage}
    */
   public LoginPage enterPassword(String password) {
-    HtmlPasswordInput passwordInputPasswordField = (HtmlPasswordInput) page.getElementById("password");
+    var passwordInputPasswordField = (HtmlPasswordInput) page.getElementById("password");
     passwordInputPasswordField.setText(password);
     return this;
   }
 
 
   /**
-   * Clicking on the login button to 'login'
+   * Clicking on the login button to 'login'.
    *
-   * @return {@link AlbumListPage}
-   *        - this is the page that user gets navigated to once successfully logged in
+   * @return {@link AlbumListPage} - this is the page that user gets navigated to once successfully
+   *     logged in
    */
   public AlbumListPage login() {
-    HtmlSubmitInput loginButton = (HtmlSubmitInput) page.getElementById("loginButton");
+    var loginButton = (HtmlSubmitInput) page.getElementById("loginButton");
     try {
       loginButton.click();
     } catch (IOException e) {
-      LOGGER.error("An error occured on login.", e);
+      LOGGER.error("An error occurred on login.", e);
     }
     return new AlbumListPage(webClient);
   }

@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,23 +27,17 @@ package com.iluwatar.partialresponse;
 import java.util.Map;
 
 /**
- * The resource class which serves video information.
- * This class act as server in the demo. Which has all video details.
+ * The resource record class which serves video information. This class act as server in the demo. Which
+ * has all video details.
+ *
+ * @param fieldJsonMapper map object to json.
+ * @param videos          initialize resource with existing videos. Act as database.
  */
-public class VideoResource {
-  private FieldJsonMapper fieldJsonMapper;
-  private Map<Integer, Video> videos;
 
+public record VideoResource(FieldJsonMapper fieldJsonMapper, Map<Integer, Video> videos) {
   /**
-   * @param fieldJsonMapper map object to json.
-   * @param videos          initialize resource with existing videos. Act as database.
-   */
-  public VideoResource(FieldJsonMapper fieldJsonMapper, Map<Integer, Video> videos) {
-    this.fieldJsonMapper = fieldJsonMapper;
-    this.videos = videos;
-  }
-
-  /**
+   * Get Details.
+   *
    * @param id     video id
    * @param fields fields to get information about
    * @return full response if no fields specified else partial response for given field.

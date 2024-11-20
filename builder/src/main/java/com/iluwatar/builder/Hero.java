@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,60 +25,23 @@
 package com.iluwatar.builder;
 
 /**
- * 
- * Hero, the class with many parameters.
- * 
+ * Hero,the record class.
  */
-public final class Hero {
 
-  private final Profession profession;
-  private final String name;
-  private final HairType hairType;
-  private final HairColor hairColor;
-  private final Armor armor;
-  private final Weapon weapon;
+public record Hero(Profession profession, String name, HairType hairType, HairColor hairColor, Armor armor, Weapon weapon) {
 
   private Hero(Builder builder) {
-    this.profession = builder.profession;
-    this.name = builder.name;
-    this.hairColor = builder.hairColor;
-    this.hairType = builder.hairType;
-    this.weapon = builder.weapon;
-    this.armor = builder.armor;
-  }
-
-  public Profession getProfession() {
-    return profession;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public HairType getHairType() {
-    return hairType;
-  }
-
-  public HairColor getHairColor() {
-    return hairColor;
-  }
-
-  public Armor getArmor() {
-    return armor;
-  }
-
-  public Weapon getWeapon() {
-    return weapon;
+    this(builder.profession, builder.name, builder.hairType, builder.hairColor, builder.armor, builder.weapon);
   }
 
   @Override
   public String toString() {
 
-    StringBuilder sb = new StringBuilder();
+    var sb = new StringBuilder();
     sb.append("This is a ")
-            .append(profession)
-            .append(" named ")
-            .append(name);
+        .append(profession)
+        .append(" named ")
+        .append(name);
     if (hairColor != null || hairType != null) {
       sb.append(" with ");
       if (hairColor != null) {
@@ -98,9 +63,7 @@ public final class Hero {
   }
 
   /**
-   * 
    * The builder class.
-   * 
    */
   public static class Builder {
 
@@ -112,7 +75,7 @@ public final class Hero {
     private Weapon weapon;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public Builder(Profession profession, String name) {
       if (profession == null || name == null) {

@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,40 +25,7 @@
 package com.iluwatar.privateclassdata;
 
 /**
- * 
- * Stew ingredients
- *
+ * Stew ingredients.
  */
-public class StewData {
 
-  private int numPotatoes;
-  private int numCarrots;
-  private int numMeat;
-  private int numPeppers;
-
-  /**
-   * Constructor
-   */
-  public StewData(int numPotatoes, int numCarrots, int numMeat, int numPeppers) {
-    this.numPotatoes = numPotatoes;
-    this.numCarrots = numCarrots;
-    this.numMeat = numMeat;
-    this.numPeppers = numPeppers;
-  }
-
-  public int getNumPotatoes() {
-    return numPotatoes;
-  }
-
-  public int getNumCarrots() {
-    return numCarrots;
-  }
-
-  public int getNumMeat() {
-    return numMeat;
-  }
-
-  public int getNumPeppers() {
-    return numPeppers;
-  }
-}
+public record StewData(int numPotatoes, int numCarrots, int numMeat, int numPeppers) {}

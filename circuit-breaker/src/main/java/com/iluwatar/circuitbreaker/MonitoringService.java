@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,14 +22,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.iluwatar.circuitbreaker;
 
 /**
- * The service class which makes local and remote calls
- * Uses {@link CircuitBreaker} object to ensure remote calls don't use up resources
+ * The service class which makes local and remote calls Uses {@link DefaultCircuitBreaker} object to
+ * ensure remote calls don't use up resources.
  */
 public class MonitoringService {
+
+  private final CircuitBreaker delayedService;
+
+  private final CircuitBreaker quickService;
+
+  public MonitoringService(CircuitBreaker delayedService, CircuitBreaker quickService) {
+    this.delayedService = delayedService;
+    this.quickService = quickService;
+  }
 
   //Assumption: Local service won't fail, no need to wrap it in a circuit breaker logic
   public String localResourceResponse() {
@@ -35,15 +45,27 @@ public class MonitoringService {
   }
 
   /**
-   * Try to get result from remote server
-   * @param circuitBreaker The circuitBreaker object with all parameters
-   * @param serverStartTime Time at which actual server was started which makes calls to this service
-   * @return result from the remote response or exception raised by it.
+   * Fetch response from the delayed service (with some simulated startup time).
+   *
+   * @return response string
    */
-  public String remoteResourceResponse(CircuitBreaker circuitBreaker, long serverStartTime) {
+  public String delayedServiceResponse() {
     try {
-      return circuitBreaker.call("delayedService", serverStartTime);
-    } catch (Exception e) {
+      return this.delayedService.attemptRequest();
+    } catch (RemoteServiceException e) {
+      return e.getMessage();
+    }
+  }
+
+  /**
+   * Fetches response from a healthy service without any failure.
+   *
+   * @return response string
+   */
+  public String quickServiceResponse() {
+    try {
+      return this.quickService.attemptRequest();
+    } catch (RemoteServiceException e) {
       return e.getMessage();
     }
   }

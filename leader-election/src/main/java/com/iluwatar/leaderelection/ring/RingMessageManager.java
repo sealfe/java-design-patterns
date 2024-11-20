@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +28,10 @@ import com.iluwatar.leaderelection.AbstractMessageManager;
 import com.iluwatar.leaderelection.Instance;
 import com.iluwatar.leaderelection.Message;
 import com.iluwatar.leaderelection.MessageType;
-
 import java.util.Map;
 
 /**
- * Implementation of RingMessageManager
+ * Implementation of RingMessageManager.
  */
 public class RingMessageManager extends AbstractMessageManager {
 
@@ -43,52 +44,56 @@ public class RingMessageManager extends AbstractMessageManager {
 
   /**
    * Send heartbeat message to current leader instance to check the health.
+   *
    * @param leaderId leaderID
    * @return {@code true} if the leader is alive.
    */
   @Override
   public boolean sendHeartbeatMessage(int leaderId) {
-    Instance leaderInstance = instanceMap.get(leaderId);
-    boolean alive = leaderInstance.isAlive();
-    return alive;
+    var leaderInstance = instanceMap.get(leaderId);
+    return leaderInstance.isAlive();
   }
 
   /**
    * Send election message to the next instance.
+   *
    * @param currentId currentID
-   * @param content list contains all the IDs of instances which have received this election message.
+   * @param content   list contains all the IDs of instances which have received this election
+   *                  message.
    * @return {@code true} if the election message is accepted by the target instance.
    */
   @Override
   public boolean sendElectionMessage(int currentId, String content) {
-    Instance nextInstance = this.findNextInstance(currentId);
-    Message electionMessage = new Message(MessageType.ELECTION, content);
+    var nextInstance = this.findNextInstance(currentId);
+    var electionMessage = new Message(MessageType.ELECTION, content);
     nextInstance.onMessage(electionMessage);
     return true;
   }
 
   /**
    * Send leader message to the next instance.
+   *
    * @param currentId Instance ID of which sends this message.
-   * @param leaderId Leader message content.
+   * @param leaderId  Leader message content.
    * @return {@code true} if the leader message is accepted by the target instance.
    */
   @Override
   public boolean sendLeaderMessage(int currentId, int leaderId) {
-    Instance nextInstance = this.findNextInstance(currentId);
-    Message leaderMessage = new Message(MessageType.LEADER, String.valueOf(leaderId));
+    var nextInstance = this.findNextInstance(currentId);
+    var leaderMessage = new Message(MessageType.LEADER, String.valueOf(leaderId));
     nextInstance.onMessage(leaderMessage);
     return true;
   }
 
   /**
    * Send heartbeat invoke message to the next instance.
+   *
    * @param currentId Instance ID of which sends this message.
    */
   @Override
   public void sendHeartbeatInvokeMessage(int currentId) {
-    Instance nextInstance = this.findNextInstance(currentId);
-    Message heartbeatInvokeMessage = new Message(MessageType.HEARTBEAT_INVOKE, "");
+    var nextInstance = this.findNextInstance(currentId);
+    var heartbeatInvokeMessage = new Message(MessageType.HEARTBEAT_INVOKE, "");
     nextInstance.onMessage(heartbeatInvokeMessage);
   }
 

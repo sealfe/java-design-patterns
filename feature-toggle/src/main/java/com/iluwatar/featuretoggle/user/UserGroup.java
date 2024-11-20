@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,16 +28,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contains the lists of users of different groups paid and free. Used to demonstrate the tiered example of feature
- * toggle. Allowing certain features to be available to only certain groups of users.
+ * Contains the lists of users of different groups paid and free. Used to demonstrate the tiered
+ * example of feature toggle. Allowing certain features to be available to only certain groups of
+ * users.
  *
  * @see User
  */
 public class UserGroup {
 
-  private static List<User> freeGroup = new ArrayList<>();
-  private static List<User> paidGroup = new ArrayList<>();
-
+  private static final List<User> freeGroup = new ArrayList<>();
+  private static final List<User> paidGroup = new ArrayList<>();
 
   /**
    * Add the passed {@link User} to the free user group list.
@@ -46,7 +48,7 @@ public class UserGroup {
    */
   public static void addUserToFreeGroup(final User user) throws IllegalArgumentException {
     if (paidGroup.contains(user)) {
-      throw new IllegalArgumentException("User all ready member of paid group.");
+      throw new IllegalArgumentException("User already member of paid group.");
     } else {
       if (!freeGroup.contains(user)) {
         freeGroup.add(user);
@@ -63,7 +65,7 @@ public class UserGroup {
    */
   public static void addUserToPaidGroup(final User user) throws IllegalArgumentException {
     if (freeGroup.contains(user)) {
-      throw new IllegalArgumentException("User all ready member of free group.");
+      throw new IllegalArgumentException("User already member of free group.");
     } else {
       if (!paidGroup.contains(user)) {
         paidGroup.add(user);
@@ -75,7 +77,6 @@ public class UserGroup {
    * Method to take a {@link User} to determine if the user is in the {@link UserGroup#paidGroup}.
    *
    * @param user {@link User} to check if they are in the {@link UserGroup#paidGroup}
-   *
    * @return true if the {@link User} is in {@link UserGroup#paidGroup}
    */
   public static boolean isPaid(User user) {

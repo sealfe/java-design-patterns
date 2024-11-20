@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,47 +26,42 @@ package com.iluwatar.data.locality.game.component.manager;
 
 import com.iluwatar.data.locality.game.component.Component;
 import com.iluwatar.data.locality.game.component.RenderComponent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.stream.IntStream;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- *  Render component manager for Game
+ * Render component manager for Game.
  */
+@Slf4j
 public class RenderComponentManager {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(RenderComponentManager.class);
 
   private static final int MAX_ENTITIES = 10000;
 
   private final int numEntities;
 
-  private static final Component[] RENDER_COMPONENTS = new RenderComponent[MAX_ENTITIES];
+  private final Component[] renderComponents = new RenderComponent[MAX_ENTITIES];
 
   public RenderComponentManager(int numEntities) {
     this.numEntities = numEntities;
   }
 
   /**
-   * Start render component
+   * Start render component.
    */
   public void start() {
     LOGGER.info("Start Render Game Component ");
-    for (int i = 0; i < numEntities; i++) {
-      RENDER_COMPONENTS[i] = new RenderComponent();
-    }
+    IntStream.range(0, numEntities).forEach(i -> renderComponents[i] = new RenderComponent());
   }
 
 
   /**
-   * render component
+   * render component.
    */
   public void render() {
     LOGGER.info("Update Render Game Component ");
     // Process Render.
-    for (int i = 0; i < numEntities; i++) {
-      if (RENDER_COMPONENTS.length > i && RENDER_COMPONENTS[i] != null) {
-        RENDER_COMPONENTS[i].render();
-      }
-    }
+    IntStream.range(0, numEntities)
+        .filter(i -> renderComponents.length > i && renderComponents[i] != null)
+        .forEach(i -> renderComponents[i].render());
   }
 }

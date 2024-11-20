@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,53 +24,47 @@
  */
 package com.iluwatar.mute;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test for the mute-idiom pattern
  */
-public class MuteTest {
+class MuteTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MuteTest.class);
 
   private static final String MESSAGE = "should not occur";
 
   @Test
-  public void muteShouldRunTheCheckedRunnableAndNotThrowAnyExceptionIfCheckedRunnableDoesNotThrowAnyException() {
-    Mute.mute(this::methodNotThrowingAnyException);
+  void muteShouldRunTheCheckedRunnableAndNotThrowAnyExceptionIfCheckedRunnableDoesNotThrowAnyException() {
+    assertDoesNotThrow(() -> Mute.mute(this::methodNotThrowingAnyException));
   }
 
   @Test
-  public void muteShouldRethrowUnexpectedExceptionAsAssertionError() {
-    assertThrows(AssertionError.class, () -> {
-      Mute.mute(this::methodThrowingException);
-    });
+  void muteShouldRethrowUnexpectedExceptionAsAssertionError() {
+    assertThrows(AssertionError.class, () -> Mute.mute(this::methodThrowingException));
   }
 
   @Test
-  public void loggedMuteShouldRunTheCheckedRunnableAndNotThrowAnyExceptionIfCheckedRunnableDoesNotThrowAnyException() {
-    Mute.loggedMute(this::methodNotThrowingAnyException);
+  void loggedMuteShouldRunTheCheckedRunnableAndNotThrowAnyExceptionIfCheckedRunnableDoesNotThrowAnyException() {
+    assertDoesNotThrow(() -> Mute.mute(this::methodNotThrowingAnyException));
   }
 
   @Test
-  public void loggedMuteShouldLogExceptionTraceBeforeSwallowingIt() {
-    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+  void loggedMuteShouldLogExceptionTraceBeforeSwallowingIt() {
+    var stream = new ByteArrayOutputStream();
     System.setErr(new PrintStream(stream));
 
     Mute.loggedMute(this::methodThrowingException);
 
-    assertTrue(new String(stream.toByteArray()).contains(MESSAGE));
+    assertTrue(stream.toString().contains(MESSAGE));
   }
-
 
   private void methodNotThrowingAnyException() {
     LOGGER.info("Executed successfully");

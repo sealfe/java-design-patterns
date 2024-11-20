@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,28 +27,27 @@ package com.iluwatar.data.locality.game;
 import com.iluwatar.data.locality.game.component.manager.AiComponentManager;
 import com.iluwatar.data.locality.game.component.manager.PhysicsComponentManager;
 import com.iluwatar.data.locality.game.component.manager.RenderComponentManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * The game Entity maintains a big array of pointers .
- * Each spin of the game loop, we need to run the following:
+ * The game Entity maintains a big array of pointers . Each spin of the game loop, we need to run
+ * the following:
  *
- *     Update the AI components .
+ * <p>Update the AI components.
  *
- *     Update the physics components for them.
+ * <p>Update the physics components for them.
  *
- *     Render them using their render components.
+ * <p>Render them using their render components.
  */
+@Slf4j
 public class GameEntity {
-  private static final Logger LOGGER = LoggerFactory.getLogger(GameEntity.class);
 
   private final AiComponentManager aiComponentManager;
   private final PhysicsComponentManager physicsComponentManager;
   private final RenderComponentManager renderComponentManager;
 
   /**
-   * Init components
+   * Init components.
    */
   public GameEntity(int numEntities) {
     LOGGER.info("Init Game with #Entity : {}", numEntities);
@@ -56,7 +57,7 @@ public class GameEntity {
   }
 
   /**
-   * start all component
+   * start all component.
    */
   public void start() {
     LOGGER.info("Start Game");
@@ -66,7 +67,7 @@ public class GameEntity {
   }
 
   /**
-   * update all component
+   * update all component.
    */
   public void update() {
     LOGGER.info("Update Game Component");
@@ -79,5 +80,5 @@ public class GameEntity {
     // Draw to screen.
     renderComponentManager.render();
   }
-  
+
 }

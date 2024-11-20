@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +24,22 @@
  */
 package com.iluwatar.observer;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 /**
- * Date: 12/27/15 - 12:07 PM
+ * HobbitsTest
  *
- * @author Jeroen Meulemeester
  */
-public class HobbitsTest extends WeatherObserverTest<Hobbits> {
+class HobbitsTest extends WeatherObserverTest<Hobbits> {
 
   @Override
   public Collection<Object[]> dataProvider() {
-    final List<Object[]> testData = new ArrayList<>();
-    testData.add(new Object[]{WeatherType.SUNNY, "The happy hobbits bade in the warm sun."});
-    testData.add(new Object[]{WeatherType.RAINY, "The hobbits look for cover from the rain."});
-    testData.add(new Object[]{WeatherType.WINDY, "The hobbits hold their hats tightly in the windy weather."});
-    testData.add(new Object[]{WeatherType.COLD, "The hobbits are shivering in the cold weather."});
-    return testData;
+    return List.of(
+        new Object[]{WeatherType.SUNNY, "The hobbits are facing Sunny weather now"},
+        new Object[]{WeatherType.RAINY, "The hobbits are facing Rainy weather now"},
+        new Object[]{WeatherType.WINDY, "The hobbits are facing Windy weather now"},
+        new Object[]{WeatherType.COLD, "The hobbits are facing Cold weather now"});
   }
 
   /**

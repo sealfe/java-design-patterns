@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,55 +24,51 @@
  */
 package com.iluwatar.featuretoggle.pattern.propertiesversion;
 
-import com.iluwatar.featuretoggle.pattern.Service;
-import com.iluwatar.featuretoggle.user.User;
-import org.junit.jupiter.api.Test;
-
-import java.util.Properties;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.iluwatar.featuretoggle.user.User;
+import java.util.Properties;
+import org.junit.jupiter.api.Test;
+
 /**
  * Test Properties Toggle
  */
-public class PropertiesFeatureToggleVersionTest {
+class PropertiesFeatureToggleVersionTest {
 
   @Test
-  public void testNullPropertiesPassed() {
-    assertThrows(IllegalArgumentException.class, () -> {
-      new PropertiesFeatureToggleVersion(null);
-    });
+  void testNullPropertiesPassed() {
+    assertThrows(IllegalArgumentException.class, () -> new PropertiesFeatureToggleVersion(null));
   }
 
   @Test
-  public void testNonBooleanProperty() {
+  void testNonBooleanProperty() {
     assertThrows(IllegalArgumentException.class, () -> {
-      final Properties properties = new Properties();
+      final var properties = new Properties();
       properties.setProperty("enhancedWelcome", "Something");
       new PropertiesFeatureToggleVersion(properties);
     });
   }
 
   @Test
-  public void testFeatureTurnedOn() {
-    final Properties properties = new Properties();
+  void testFeatureTurnedOn() {
+    final var properties = new Properties();
     properties.put("enhancedWelcome", true);
-    Service service = new PropertiesFeatureToggleVersion(properties);
+    var service = new PropertiesFeatureToggleVersion(properties);
     assertTrue(service.isEnhanced());
-    final String welcomeMessage = service.getWelcomeMessage(new User("Jamie No Code"));
+    final var welcomeMessage = service.getWelcomeMessage(new User("Jamie No Code"));
     assertEquals("Welcome Jamie No Code. You're using the enhanced welcome message.", welcomeMessage);
   }
 
   @Test
-  public void testFeatureTurnedOff() {
-    final Properties properties = new Properties();
+  void testFeatureTurnedOff() {
+    final var properties = new Properties();
     properties.put("enhancedWelcome", false);
-    Service service = new PropertiesFeatureToggleVersion(properties);
+    var service = new PropertiesFeatureToggleVersion(properties);
     assertFalse(service.isEnhanced());
-    final String welcomeMessage = service.getWelcomeMessage(new User("Jamie No Code"));
+    final var welcomeMessage = service.getWelcomeMessage(new User("Jamie No Code"));
     assertEquals("Welcome to the application.", welcomeMessage);
   }
 }

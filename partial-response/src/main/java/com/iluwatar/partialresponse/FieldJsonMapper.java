@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,33 +25,36 @@
 package com.iluwatar.partialresponse;
 
 import java.lang.reflect.Field;
+import java.util.StringJoiner;
 
 /**
- * Map a video to json
+ * Map a video to json.
  */
 public class FieldJsonMapper {
 
   /**
+   * Gets json of required fields from video.
+   *
    * @param video  object containing video information
    * @param fields fields information to get
    * @return json of required fields from video
    */
   public String toJson(Video video, String[] fields) throws Exception {
-    StringBuilder json = new StringBuilder().append("{");
+    var json = new StringJoiner(",", "{", "}");
 
-    for (int i = 0, fieldsLength = fields.length; i < fieldsLength; i++) {
-      json.append(getString(video, Video.class.getDeclaredField(fields[i])));
-      if (i != fieldsLength - 1) {
-        json.append(",");
-      }
+    var i = 0;
+    var fieldsLength = fields.length;
+    while (i < fieldsLength) {
+      json.add(getString(video, Video.class.getDeclaredField(fields[i])));
+      i++;
     }
-    json.append("}");
+
     return json.toString();
   }
 
   private String getString(Video video, Field declaredField) throws IllegalAccessException {
     declaredField.setAccessible(true);
-    Object value = declaredField.get(video);
+    var value = declaredField.get(video);
     if (declaredField.get(video) instanceof Integer) {
       return "\"" + declaredField.getName() + "\"" + ": " + value;
     }

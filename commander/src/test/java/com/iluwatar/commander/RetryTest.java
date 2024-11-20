@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,54 +24,49 @@
  */
 package com.iluwatar.commander;
 
-import static org.junit.jupiter.api.Assertions.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.iluwatar.commander.Order;
-import com.iluwatar.commander.Retry;
-import com.iluwatar.commander.User;
-import com.iluwatar.commander.Retry.HandleErrorIssue;
-import com.iluwatar.commander.Retry.Operation;
 import com.iluwatar.commander.exceptions.DatabaseUnavailableException;
 import com.iluwatar.commander.exceptions.ItemUnavailableException;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class RetryTest {
 
+  private static final Logger LOG = LoggerFactory.getLogger(RetryTest.class);
+
   @Test
   void performTest() {
-    Retry.Operation op = (l) -> { 
+    Retry.Operation op = (l) -> {
       if (!l.isEmpty()) {
         throw l.remove(0);
       }
-      return; 
     };
-    Retry.HandleErrorIssue<Order> handleError = (o,e) -> { 
-      return; 
+    Retry.HandleErrorIssue<Order> handleError = (o, e) -> {
     };
-    Retry<Order> r1 = new Retry<Order>(op, handleError, 3, 30000,
+    var r1 = new Retry<>(op, handleError, 3, 30000,
         e -> DatabaseUnavailableException.class.isAssignableFrom(e.getClass()));
-    Retry<Order> r2 = new Retry<Order>(op, handleError, 3, 30000,
+    var r2 = new Retry<>(op, handleError, 3, 30000,
         e -> DatabaseUnavailableException.class.isAssignableFrom(e.getClass()));
-    User user = new User("Jim", "ABCD");
-    Order order = new Order(user, "book", 10f);
-    ArrayList<Exception> arr1 = new ArrayList<Exception>(Arrays.asList(new Exception[]
-        {new ItemUnavailableException(), new DatabaseUnavailableException()}));
+    var user = new User("Jim", "ABCD");
+    var order = new Order(user, "book", 10f);
+    var arr1 = new ArrayList<>(List.of(new ItemUnavailableException(), new DatabaseUnavailableException()));
     try {
       r1.perform(arr1, order);
     } catch (Exception e1) {
-      e1.printStackTrace();
+      LOG.error("An exception occurred", e1);
     }
-    ArrayList<Exception> arr2 = new ArrayList<Exception>(Arrays.asList(new Exception[]
-        {new DatabaseUnavailableException(), new ItemUnavailableException()}));
+    var arr2 = new ArrayList<>(List.of(new DatabaseUnavailableException(), new ItemUnavailableException()));
     try {
       r2.perform(arr2, order);
     } catch (Exception e1) {
-      e1.printStackTrace();
+      LOG.error("An exception occurred", e1);
     }
     //r1 stops at ItemUnavailableException, r2 retries because it encounters DatabaseUnavailableException
-    assertTrue(arr1.size() == 1 && arr2.size() == 0);
+    assertTrue(arr1.size() == 1 && arr2.isEmpty());
   }
 
 }

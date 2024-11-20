@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +24,18 @@
  */
 package com.iluwatar.leaderelection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Abstract class of all the instance implementation classes.
  */
+@Slf4j
 public abstract class AbstractInstance implements Instance, Runnable {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractInstance.class);
-
   protected static final int HEARTBEAT_INTERVAL = 5000;
+  private static final String INSTANCE = "Instance ";
 
   protected MessageManager messageManager;
   protected Queue<Message> messageQueue;
@@ -58,6 +58,7 @@ public abstract class AbstractInstance implements Instance, Runnable {
    * The instance will execute the message in its message queue periodically once it is alive.
    */
   @Override
+  @SuppressWarnings("squid:S2189")
   public void run() {
     while (true) {
       if (!this.messageQueue.isEmpty()) {
@@ -67,7 +68,9 @@ public abstract class AbstractInstance implements Instance, Runnable {
   }
 
   /**
-   * Once messages are sent to the certain instance, it will firstly be added to the queue and wait to be executed.
+   * Once messages are sent to the certain instance, it will firstly be added to the queue and wait
+   * to be executed.
+   *
    * @param message Message sent by other instances
    */
   @Override
@@ -77,6 +80,7 @@ public abstract class AbstractInstance implements Instance, Runnable {
 
   /**
    * Check if the instance is alive or not.
+   *
    * @return {@code true} if the instance is alive.
    */
   @Override
@@ -86,6 +90,7 @@ public abstract class AbstractInstance implements Instance, Runnable {
 
   /**
    * Set the health status of the certain instance.
+   *
    * @param alive {@code true} for alive.
    */
   @Override
@@ -95,42 +100,43 @@ public abstract class AbstractInstance implements Instance, Runnable {
 
   /**
    * Process the message according to its type.
+   *
    * @param message Message polled from queue.
    */
   private void processMessage(Message message) {
     switch (message.getType()) {
-      case ELECTION:
-        LOGGER.info("Instance " + localId + " - Election Message handling...");
+      case ELECTION -> {
+        LOGGER.info(INSTANCE + localId + " - Election Message handling...");
         handleElectionMessage(message);
-        break;
-      case LEADER:
-        LOGGER.info("Instance " + localId + " - Leader Message handling...");
+      }
+      case LEADER -> {
+        LOGGER.info(INSTANCE + localId + " - Leader Message handling...");
         handleLeaderMessage(message);
-        break;
-      case HEARTBEAT:
-        LOGGER.info("Instance " + localId + " - Heartbeat Message handling...");
+      }
+      case HEARTBEAT -> {
+        LOGGER.info(INSTANCE + localId + " - Heartbeat Message handling...");
         handleHeartbeatMessage(message);
-        break;
-      case ELECTION_INVOKE:
-        LOGGER.info("Instance " + localId + " - Election Invoke Message handling...");
+      }
+      case ELECTION_INVOKE -> {
+        LOGGER.info(INSTANCE + localId + " - Election Invoke Message handling...");
         handleElectionInvokeMessage();
-        break;
-      case LEADER_INVOKE:
-        LOGGER.info("Instance " + localId + " - Leader Invoke Message handling...");
+      }
+      case LEADER_INVOKE -> {
+        LOGGER.info(INSTANCE + localId + " - Leader Invoke Message handling...");
         handleLeaderInvokeMessage();
-        break;
-      case HEARTBEAT_INVOKE:
-        LOGGER.info("Instance " + localId + " - Heartbeat Invoke Message handling...");
+      }
+      case HEARTBEAT_INVOKE -> {
+        LOGGER.info(INSTANCE + localId + " - Heartbeat Invoke Message handling...");
         handleHeartbeatInvokeMessage();
-        break;
-      default:
-        break;
+      }
+      default -> {
+      }
     }
   }
 
   /**
-   * Abstract methods to handle different types of message. These methods need to be implemented in concrete instance
-   * class to implement corresponding leader-selection pattern.
+   * Abstract methods to handle different types of message. These methods need to be implemented in
+   * concrete instance class to implement corresponding leader-selection pattern.
    */
   protected abstract void handleElectionMessage(Message message);
 

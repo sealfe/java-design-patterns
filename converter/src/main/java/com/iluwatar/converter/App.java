@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +24,8 @@
  */
 package com.iluwatar.converter;
 
-
-import com.google.common.collect.Lists;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The Converter pattern is a behavioral design pattern which allows a common way of bidirectional
@@ -36,11 +33,11 @@ import java.util.List;
  * isomorphic types). Moreover, the pattern introduces a common way of converting a collection of
  * objects between types.
  */
+@Slf4j
 public class App {
-  
-  private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
+
   /**
-   * Program entry point
+   * Program entry point.
    *
    * @param args command line args
    */
@@ -49,16 +46,18 @@ public class App {
 
     UserDto dtoUser = new UserDto("John", "Doe", true, "whatever[at]wherever.com");
     User user = userConverter.convertFromDto(dtoUser);
-    LOGGER.info("Entity converted from DTO:" + user);
+    LOGGER.info("Entity converted from DTO: {}", user);
 
-    ArrayList<User> users = Lists.newArrayList(new User("Camile", "Tough", false, "124sad"),
-        new User("Marti", "Luther", true, "42309fd"), new User("Kate", "Smith", true, "if0243"));
+    var users = List.of(
+        new User("Camile", "Tough", false, "124sad"),
+        new User("Marti", "Luther", true, "42309fd"),
+        new User("Kate", "Smith", true, "if0243")
+    );
     LOGGER.info("Domain entities:");
     users.stream().map(User::toString).forEach(LOGGER::info);
 
     LOGGER.info("DTO entities converted from domain:");
     List<UserDto> dtoEntities = userConverter.createFromEntities(users);
     dtoEntities.stream().map(UserDto::toString).forEach(LOGGER::info);
-
   }
 }

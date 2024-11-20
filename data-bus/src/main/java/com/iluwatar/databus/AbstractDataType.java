@@ -1,6 +1,8 @@
-/**
+/*
+ * This project is licensed under the MIT license. Module model-view-viewmodel is using ZK framework licensed under LGPL (see lgpl-3.0.txt).
+ *
  * The MIT License
- * Copyright © 2014-2019 Ilkka Seppälä
+ * Copyright © 2014-2022 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -46,22 +48,16 @@ SOFTWARE.
 
 package com.iluwatar.databus;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Base for data to send via the Data-Bus.
  *
- * @author Paul Campbell (pcampbell@kemitix.net)
  */
+@Getter
+@Setter
 public class AbstractDataType implements DataType {
 
   private DataBus dataBus;
-
-  @Override
-  public DataBus getDataBus() {
-    return dataBus;
-  }
-
-  @Override
-  public void setDataBus(DataBus dataBus) {
-    this.dataBus = dataBus;
-  }
 }
